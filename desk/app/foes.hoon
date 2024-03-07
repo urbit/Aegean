@@ -5,7 +5,7 @@
 ::
 +$  versioned-state  $%(state-0)
 ::
-+$  state-0  [%0 =suspects =enemies]
++$  state-0  [%0 =suspects =enemies]  ::TO-DO public=?
 ::
 +$  card  $+(card card:agent:gall)
 --
@@ -78,6 +78,7 @@
 ::
 ++  init
   ^+  that
+  ::  TO-DO  =.  public  %.n
   %-  emil
   :~  :*  %pass  /targets  %agent
           [our.bowl %pals]  %watch  /targets
@@ -155,6 +156,7 @@
             %meet
           (emit (follow ship.effect))
             %part
+          ::  TO-DO give %kick
           (emit (unfollow ship.effect))
         ==
       ==
@@ -192,6 +194,7 @@
   ^+  that
   ?+    path  that
       [%enemies ~]
+    ::  TO-DO switch on public
     ?>  %.  src.bowl
         %~  has
           in

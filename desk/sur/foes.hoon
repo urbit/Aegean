@@ -7,6 +7,7 @@
       [%unaccuse =ship]
       [%add-tag =ship =tag]
       [%remove-tag =ship =tag]
+      ::[%switch-public ~]
   ==
 +$  update
   $%  [%accuse =ship]
