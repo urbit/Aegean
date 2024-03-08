@@ -16,115 +16,54 @@
 ::
 ^-  agent:gall
 ::
-=<
 |_  =bowl:gall
 +*  this  .
     def  ~(. (default-agent this %|) bowl)
-    hc   ~(. +> [bowl ~])
 ::
 ++  on-init
   ^-  (quip card _this)
-  =^  cards  state  abet:init:hc
-  [cards this]
+  :_  this(public %.n)
+  :~  :*  %pass  /targets  %agent
+          [our.bowl %pals]  %watch  /targets
+      ==  
+  ==
 ::
 ++  on-save
   ^-  vase
   !>(state)
 ::
 ++  on-load
-  |=  =vase
+  |=  old-state=vase
   ^-  (quip card _this)
-  =^  cards  state  abet:(load:hc vase)
-  [cards this]
+  =/  old  !<(versioned-state old-state)
+  ?-  -.old
+    %0  `this(state old)
+  ==
 ::
 ++  on-poke
   |=  =cage
   ^-  (quip card _this)
-  =^  cards  state  abet:(poke:hc cage)
-  [cards this]
-::
-++  on-peek
-  |=  =path
-  ^-  (unit (unit cage))
-  [~ ~]
-::
-++  on-agent
-  |=  [=wire =sign:agent:gall]
-  ^-  (quip card _this)
-  =^  cards  state  abet:(agent:hc [wire sign])
-  [cards this]
-::
-++  on-arvo
-  |=  [=wire =sign-arvo]
-  ^-  (quip card _this)
-  `this
-::
-++  on-watch
-  |=  =path
-  ^-  (quip card _this)
-  =^  cards  state  abet:(watch:hc path)
-  [cards this]
-::
-++  on-fail   on-fail:def
-++  on-leave  on-leave:def
---
-::
-|_  [=bowl:gall deck=(list card)]
-+*  that  .
-::
-++  emit  |=(=card that(deck [card deck]))
-++  emil  |=(lac=(list card) that(deck (welp lac deck)))
-++  abet  ^-((quip card _state) [(flop deck) state])
-::
-++  init
-  ^+  that
-  =.  public  %.n
-  %-  emil
-  :~  :*  %pass  /targets  %agent
-          [our.bowl %pals]  %watch  /targets
-      ==  
-  ==
-::
-++  poke
-  |=  =cage
-  ^+  that
   ?>  =(src.bowl our.bowl)
-  ?+    -.cage  !!
-      %foes-action
-    (handle-action !<(action +.cage))
-  ==
-::
-++  accusation
-  |=  =ship
-  ^-  card
-  [%give %fact ~[/enemies] %foes-update !>([%accuse ship])]
-::
-++  unaccusation
-  |=  =ship
-  ^-  card
-  [%give %fact ~[/enemies] %foes-update !>([%unaccuse ship])]
-::
-++  handle-action
-  |=  act=action
-  ^+  that
+  ?>  =(-.cage %foes-action)
+  =/  act  !<(action +.cage)
   ?-    -.act
       %accuse
-    =.  enemies  (~(put by enemies) ship.act ~)
-    (emit (accusation ship.act))
+    :_  this(enemies (~(put by enemies) ship.act ~))
+    [%give %fact ~[/enemies] %foes-update !>([%accuse ship])]~
   ::
       %unaccuse
-    =.  enemies  (~(del by enemies) ship.act)
-    (emit (unaccusation ship.act))
+    :_  this(enemies (~(del by enemies) ship.act))
+    [%give %fact ~[/enemies] %foes-update !>([%unaccuse ship])]~
   ::
       %add-tag
-    =-  that(enemies (~(put by enemies) ship.act -))
+    =-  `this(enemies (~(put by enemies) ship.act -))
     %.  tag.act
     %~  put  
       in
     (~(got by enemies) ship.act)
   ::
       %remove-tag
-    =-  that(enemies (~(put by enemies) ship.act -))
+    =-  `this(enemies (~(put by enemies) ship.act -))
     %.  tag.act
     %~  del  
       in
@@ -132,39 +71,38 @@
   ::
       %switch-public
     ?:  =(public %.y)
-      that(public %.n)
-    that(public %.y)
+      `this(public %.n)
+    `this(public %.y)
   ==
 ::
-++  follow
-  |=  =ship
-  ^-  card
-  [%pass /accusations %agent [ship %foes] %watch /enemies]
-::
-++  unfollow
-  |=  =ship
-  ^-  card
-  [%pass /accusations %agent [ship %foes] %leave ~]
-::
-++  agent
+++  on-agent
   |=  [=wire =sign:agent:gall]
-  ^+  that
+  ^-  (quip card _this)
   ?+    wire  !!
       [%targets ~]
-    ?+    -.sign  that
+    ?+    -.sign  !!
         %fact
-      ?+    p.cage.sign  that
+      ?+    p.cage.sign  !!
           %pals-effect
         =/  effect
           !<(effect:pals q.cage.sign)
-        ?+    -.effect  that
+        ?+    -.effect  !!
             %meet
-          (emit (follow ship.effect))
+          :_  this
+          :~  :*  %pass  /accusations  %agent 
+                  [ship.effect %foes]  %watch  /enemies
+              ==
+          ==
+        ::
             %part
-          =.  that  (emit (unfollow ship.effect))
+          :_  this
+          =/  leave
+            :*  %pass  /accusations  %agent
+                [ship.effect %foes]  %leave  ~
+            ==
           ?:  =(public %.y)
-            that
-          (emit [%give %kick ~[/enemies] `ship.effect])
+            [leave ~]
+          [leave [%give %kick ~[/enemies] `ship.effect] ~]
         ==
       ==
     ==
@@ -172,22 +110,25 @@
       [%accusations ~]
     ?+    -.sign  !!
         %kick
-      %-  emit
-      (follow src.bowl)
+      :_  this
+      :~  :*  %pass  /accusations  %agent 
+              [src.bowl %foes]  %watch  /enemies
+          ==
+      ==
       ::
         %fact
       ?>  =(p.cage.sign %foes-update)
       =/  upd  !<(update q.cage.sign)
       ?-    -.upd
           %accuse
-        =-  that(suspects (~(put by suspects) ship.upd -))
+        =-  `this(suspects (~(put by suspects) ship.upd -))
         %.  ship.upd
         %~  put  
           in
         (~(got by suspects) ship.upd)
         ::
           %unaccuse
-        =-  that(suspects (~(put by suspects) ship.upd -))
+        =-  `this(suspects (~(put by suspects) ship.upd -))
         %.  ship.upd
         %~  del  
           in
@@ -196,10 +137,10 @@
     ==
   ==
 ::
-++  watch
+++  on-watch
   |=  =path
-  ^+  that
-  ?+    path  that
+  ^-  (quip card _this)
+  ?+    path  !!
       [%enemies ~]
     ?>  ?|  =(public %.y)
         ::
@@ -208,21 +149,22 @@
               in
             .^((set @p) %gx /=pals=/targets)
         ==
-    %-  emil
-    %+  weld
-      ?:  (~(has by wex.bowl) [/accusations src.bowl %foes])
-        ~
-      [(follow src.bowl) ~]
-    %+  turn
-      %~  tap  in
-      ~(key by enemies)
-    |=  =ship
-    (accusation ship)
+    :_  this
+    =/  cards
+      %+  turn
+        %~  tap  in
+        ~(key by enemies)
+      |=  =ship
+      ^-  card
+      [%give %fact ~[/enemies] %foes-update !>([%accuse ship])]
+      ::
+    ?:  (~(has by wex.bowl) [/accusations src.bowl %foes])
+      cards 
+    [[%pass /accusations %agent [src.bowl %foes] %watch /enemies] cards]
   ==
 ::
-++  load
-  |=  =vase
-  ^+  that
-  ?>  ?=([%0 *] q.vase)
-  that(state !<(state-0 vase))
+++  on-peek  on-peek:def
+++  on-arvo  on-arvo:def
+++  on-fail   on-fail:def
+++  on-leave  on-leave:def
 --
