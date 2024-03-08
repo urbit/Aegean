@@ -5,7 +5,7 @@
 ::
 +$  versioned-state  $%(state-0)
 ::
-+$  state-0  [%0 =suspects =enemies]  ::TO-DO public=?
++$  state-0  [%0 =suspects =enemies public=?]
 ::
 +$  card  $+(card card:agent:gall)
 --
@@ -78,7 +78,7 @@
 ::
 ++  init
   ^+  that
-  ::  TO-DO  =.  public  %.n
+  =.  public  %.n
   %-  emil
   :~  :*  %pass  /targets  %agent
           [our.bowl %pals]  %watch  /targets
@@ -129,6 +129,11 @@
     %~  del  
       in
     (~(got by enemies) ship.act)
+  ::
+      %switch-public
+    ?:  =(public %.y)
+      that(public %.n)
+    that(public %.y)
   ==
 ::
 ++  follow
@@ -156,8 +161,10 @@
             %meet
           (emit (follow ship.effect))
             %part
-          ::  TO-DO give %kick
-          (emit (unfollow ship.effect))
+          =.  that  (emit (unfollow ship.effect))
+          ?:  =(public %.y)
+            that
+          (emit [%give %kick ~[/enemies] `ship.effect])
         ==
       ==
     ==
@@ -194,11 +201,13 @@
   ^+  that
   ?+    path  that
       [%enemies ~]
-    ::  TO-DO switch on public
-    ?>  %.  src.bowl
-        %~  has
-          in
-        .^((set @p) %gx /=pals=/targets)
+    ?>  ?|  =(public %.y)
+        ::
+            %.  src.bowl
+            %~  has
+              in
+            .^((set @p) %gx /=pals=/targets)
+        ==
     %-  emil
     %+  weld
       ?:  (~(has by wex.bowl) [/accusations src.bowl %foes])

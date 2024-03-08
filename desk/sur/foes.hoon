@@ -7,7 +7,7 @@
       [%unaccuse =ship]
       [%add-tag =ship =tag]
       [%remove-tag =ship =tag]
-      ::[%switch-public ~]
+      [%switch-public ~]  :: Warning: turning this off won't kick subscribers from when it was on
   ==
 +$  update
   $%  [%accuse =ship]
