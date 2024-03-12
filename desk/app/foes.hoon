@@ -1,3 +1,29 @@
+:: %foes
+::
+:: Coded by ~hanfel-dovned
+:: Designed by ~tiller-tolbus
+:: 
+:: A counterpart to %pals for identifying malicious users.
+:: 
+:: An enemy is someone you accuse.
+:: A suspect is someone your mutual pal accuses.
+:: 
+:: You will tell your mutual pals about people you accuse,
+:: and they'll flag them as suspects.
+:: 
+:: Your mutual pals will tell you about people they accuse,
+:: and you'll flag them as suspects.
+:: 
+:: Scry Paths:
+:: /x/enemies - Returns a (set ship) of all your enemies
+:: /x/enemies/@p - Returns a (set tag) of your tags for that enemy
+:: /x/suspects - Returns a (map ship (set ship)) of all suspects
+:: /x/suspects/@p - Returns a (set ship) of all accused by that accuser
+:: 
+:: Subscription Paths:
+:: /enemies - Pushes an %accuse or %unaccuse when you accuse or unaccuse someone
+:: /suspects - Pushes a %suspected or %unsuspected when one of your pals accuses or unaccuses someone
+::
 /-  *foes, pals
 /+  dbug, default-agent
 ::
@@ -119,20 +145,28 @@
         %fact
       ?>  =(p.cage.sign %foes-update)
       =/  upd  !<(update q.cage.sign)
-      ?-    -.upd
+      ?+    -.upd  !!
           %accuse
-        =-  `this(suspects (~(put by suspects) ship.upd -))
+        :-  :~  :*  %give  %fact  ~[/suspects] 
+                    %foes-update  !>([%suspected src.bowl ship.upd])
+                ==  
+            ==
+        =-  this(suspects (~(put by suspects) src.bowl -))
         %.  ship.upd
         %~  put  
           in
-        (~(got by suspects) ship.upd)
+        (~(got by suspects) src.bowl) 
         ::
           %unaccuse
-        =-  `this(suspects (~(put by suspects) ship.upd -))
+        :-  :~  :*  %give  %fact  ~[/suspects] 
+                    %foes-update  !>([%unsuspected src.bowl ship.upd])
+                ==  
+            ==
+        =-  this(suspects (~(put by suspects) src.bowl -))
         %.  ship.upd
         %~  del  
           in
-        (~(got by suspects) ship.upd)
+        (~(got by suspects) src.bowl)
       ==
     ==
   ==
@@ -161,9 +195,41 @@
     ?:  (~(has by wex.bowl) [/accusations src.bowl %foes])
       cards 
     [[%pass /accusations %agent [src.bowl %foes] %watch /enemies] cards]
+  ::
+      [%suspects ~]
+    ?>  =(our.bowl src.bowl)
+    :_  this
+    %-  zing
+    ^-  (list (list card))
+    %+  turn
+      ~(tap by suspects)
+    |=  [accuser=ship accused=(set ship)]
+    ^-  (list card)
+    %+   turn
+      ~(tap in accused) 
+    |=  =ship
+    ^-  card
+    [%give %fact ~[/suspects] %foes-update !>([%suspected accuser ship])]
   ==
 ::
-++  on-peek  on-peek:def
+++  on-peek
+  |=  =path
+  ^-  (unit (unit cage))
+  ?>  =(src.bowl our.bowl)
+  ?+    path  !!
+      [%x %enemies ~]  
+    ``noun+!>(enemies)
+  ::
+      [%x %enemies @ ~]
+    ``noun+!>((~(get by enemies) (need (slaw %p i.t.t.path))))
+  ::
+      [%x %suspects ~]
+    ``noun+!>(suspects)
+  ::
+      [%x %suspects @ ~]
+    ``noun+!>((~(get by suspects) (need (slaw %p i.t.t.path))))
+  ==
+::
 ++  on-arvo  on-arvo:def
 ++  on-fail   on-fail:def
 ++  on-leave  on-leave:def
