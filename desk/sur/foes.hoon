@@ -12,5 +12,7 @@
 +$  update
   $%  [%accuse =ship]
       [%unaccuse =ship]
+      [%suspected accuser=ship =ship]
+      [%unsuspected unaccuser=ship =ship]
   ==
 --

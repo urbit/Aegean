@@ -1,3 +1,29 @@
+:: %foes
+::
+:: Coded by ~hanfel-dovned
+:: Designed by ~tiller-tolbus
+:: 
+:: A counterpart to %pals for identifying malicious users.
+:: 
+:: An enemy is someone you accuse.
+:: A suspect is someone your mutual pal accuses.
+:: 
+:: You will tell your mutual pals about people you accuse,
+:: and they'll flag them as suspects.
+:: 
+:: Your mutual pals will tell you about people they accuse,
+:: and you'll flag them as suspects.
+:: 
+:: Scry Paths:
+:: /x/enemies - Returns a (set ship) of all your enemies
+:: /x/enemies/@p - Returns a (set tag) of your tags for that enemy
+:: /x/suspects - Returns a (map ship (set ship)) of all suspects
+:: /x/suspects/@p - Returns a (set ship) of all accused by that accuser
+:: 
+:: Subscription Paths:
+:: /enemies - Pushes an %accuse or %unaccuse when you accuse or unaccuse someone
+:: /suspects - Pushes a %suspected or %unsuspected when one of your pals accuses or unaccuses someone
+::
 /-  *foes, pals
 /+  dbug, default-agent
 ::
@@ -16,115 +42,54 @@
 ::
 ^-  agent:gall
 ::
-=<
 |_  =bowl:gall
 +*  this  .
     def  ~(. (default-agent this %|) bowl)
-    hc   ~(. +> [bowl ~])
 ::
 ++  on-init
   ^-  (quip card _this)
-  =^  cards  state  abet:init:hc
-  [cards this]
+  :_  this(public %.n)
+  :~  :*  %pass  /targets  %agent
+          [our.bowl %pals]  %watch  /targets
+      ==  
+  ==
 ::
 ++  on-save
   ^-  vase
   !>(state)
 ::
 ++  on-load
-  |=  =vase
+  |=  old-state=vase
   ^-  (quip card _this)
-  =^  cards  state  abet:(load:hc vase)
-  [cards this]
+  =/  old  !<(versioned-state old-state)
+  ?-  -.old
+    %0  `this(state old)
+  ==
 ::
 ++  on-poke
   |=  =cage
   ^-  (quip card _this)
-  =^  cards  state  abet:(poke:hc cage)
-  [cards this]
-::
-++  on-peek
-  |=  =path
-  ^-  (unit (unit cage))
-  [~ ~]
-::
-++  on-agent
-  |=  [=wire =sign:agent:gall]
-  ^-  (quip card _this)
-  =^  cards  state  abet:(agent:hc [wire sign])
-  [cards this]
-::
-++  on-arvo
-  |=  [=wire =sign-arvo]
-  ^-  (quip card _this)
-  `this
-::
-++  on-watch
-  |=  =path
-  ^-  (quip card _this)
-  =^  cards  state  abet:(watch:hc path)
-  [cards this]
-::
-++  on-fail   on-fail:def
-++  on-leave  on-leave:def
---
-::
-|_  [=bowl:gall deck=(list card)]
-+*  that  .
-::
-++  emit  |=(=card that(deck [card deck]))
-++  emil  |=(lac=(list card) that(deck (welp lac deck)))
-++  abet  ^-((quip card _state) [(flop deck) state])
-::
-++  init
-  ^+  that
-  =.  public  %.n
-  %-  emil
-  :~  :*  %pass  /targets  %agent
-          [our.bowl %pals]  %watch  /targets
-      ==  
-  ==
-::
-++  poke
-  |=  =cage
-  ^+  that
   ?>  =(src.bowl our.bowl)
-  ?+    -.cage  !!
-      %foes-action
-    (handle-action !<(action +.cage))
-  ==
-::
-++  accusation
-  |=  =ship
-  ^-  card
-  [%give %fact ~[/enemies] %foes-update !>([%accuse ship])]
-::
-++  unaccusation
-  |=  =ship
-  ^-  card
-  [%give %fact ~[/enemies] %foes-update !>([%unaccuse ship])]
-::
-++  handle-action
-  |=  act=action
-  ^+  that
+  ?>  =(-.cage %foes-action)
+  =/  act  !<(action +.cage)
   ?-    -.act
       %accuse
-    =.  enemies  (~(put by enemies) ship.act ~)
-    (emit (accusation ship.act))
+    :_  this(enemies (~(put by enemies) ship.act ~))
+    [%give %fact ~[/enemies] %foes-update !>([%accuse ship])]~
   ::
       %unaccuse
-    =.  enemies  (~(del by enemies) ship.act)
-    (emit (unaccusation ship.act))
+    :_  this(enemies (~(del by enemies) ship.act))
+    [%give %fact ~[/enemies] %foes-update !>([%unaccuse ship])]~
   ::
       %add-tag
-    =-  that(enemies (~(put by enemies) ship.act -))
+    =-  `this(enemies (~(put by enemies) ship.act -))
     %.  tag.act
     %~  put  
       in
     (~(got by enemies) ship.act)
   ::
       %remove-tag
-    =-  that(enemies (~(put by enemies) ship.act -))
+    =-  `this(enemies (~(put by enemies) ship.act -))
     %.  tag.act
     %~  del  
       in
@@ -132,39 +97,38 @@
   ::
       %switch-public
     ?:  =(public %.y)
-      that(public %.n)
-    that(public %.y)
+      `this(public %.n)
+    `this(public %.y)
   ==
 ::
-++  follow
-  |=  =ship
-  ^-  card
-  [%pass /accusations %agent [ship %foes] %watch /enemies]
-::
-++  unfollow
-  |=  =ship
-  ^-  card
-  [%pass /accusations %agent [ship %foes] %leave ~]
-::
-++  agent
+++  on-agent
   |=  [=wire =sign:agent:gall]
-  ^+  that
+  ^-  (quip card _this)
   ?+    wire  !!
       [%targets ~]
-    ?+    -.sign  that
+    ?+    -.sign  !!
         %fact
-      ?+    p.cage.sign  that
+      ?+    p.cage.sign  !!
           %pals-effect
         =/  effect
           !<(effect:pals q.cage.sign)
-        ?+    -.effect  that
+        ?+    -.effect  !!
             %meet
-          (emit (follow ship.effect))
+          :_  this
+          :~  :*  %pass  /accusations  %agent 
+                  [ship.effect %foes]  %watch  /enemies
+              ==
+          ==
+        ::
             %part
-          =.  that  (emit (unfollow ship.effect))
+          :_  this
+          =/  leave
+            :*  %pass  /accusations  %agent
+                [ship.effect %foes]  %leave  ~
+            ==
           ?:  =(public %.y)
-            that
-          (emit [%give %kick ~[/enemies] `ship.effect])
+            [leave ~]
+          [leave [%give %kick ~[/enemies] `ship.effect] ~]
         ==
       ==
     ==
@@ -172,34 +136,45 @@
       [%accusations ~]
     ?+    -.sign  !!
         %kick
-      %-  emit
-      (follow src.bowl)
+      :_  this
+      :~  :*  %pass  /accusations  %agent 
+              [src.bowl %foes]  %watch  /enemies
+          ==
+      ==
       ::
         %fact
       ?>  =(p.cage.sign %foes-update)
       =/  upd  !<(update q.cage.sign)
-      ?-    -.upd
+      ?+    -.upd  !!
           %accuse
-        =-  that(suspects (~(put by suspects) ship.upd -))
+        :-  :~  :*  %give  %fact  ~[/suspects] 
+                    %foes-update  !>([%suspected src.bowl ship.upd])
+                ==  
+            ==
+        =-  this(suspects (~(put by suspects) src.bowl -))
         %.  ship.upd
         %~  put  
           in
-        (~(got by suspects) ship.upd)
+        (~(got by suspects) src.bowl) 
         ::
           %unaccuse
-        =-  that(suspects (~(put by suspects) ship.upd -))
+        :-  :~  :*  %give  %fact  ~[/suspects] 
+                    %foes-update  !>([%unsuspected src.bowl ship.upd])
+                ==  
+            ==
+        =-  this(suspects (~(put by suspects) src.bowl -))
         %.  ship.upd
         %~  del  
           in
-        (~(got by suspects) ship.upd)
+        (~(got by suspects) src.bowl)
       ==
     ==
   ==
 ::
-++  watch
+++  on-watch
   |=  =path
-  ^+  that
-  ?+    path  that
+  ^-  (quip card _this)
+  ?+    path  !!
       [%enemies ~]
     ?>  ?|  =(public %.y)
         ::
@@ -208,21 +183,54 @@
               in
             .^((set @p) %gx /=pals=/targets)
         ==
-    %-  emil
-    %+  weld
-      ?:  (~(has by wex.bowl) [/accusations src.bowl %foes])
-        ~
-      [(follow src.bowl) ~]
+    :_  this
+    =/  cards
+      %+  turn
+        %~  tap  in
+        ~(key by enemies)
+      |=  =ship
+      ^-  card
+      [%give %fact ~[/enemies] %foes-update !>([%accuse ship])]
+      ::
+    ?:  (~(has by wex.bowl) [/accusations src.bowl %foes])
+      cards 
+    [[%pass /accusations %agent [src.bowl %foes] %watch /enemies] cards]
+  ::
+      [%suspects ~]
+    ?>  =(our.bowl src.bowl)
+    :_  this
+    %-  zing
+    ^-  (list (list card))
     %+  turn
-      %~  tap  in
-      ~(key by enemies)
+      ~(tap by suspects)
+    |=  [accuser=ship accused=(set ship)]
+    ^-  (list card)
+    %+   turn
+      ~(tap in accused) 
     |=  =ship
-    (accusation ship)
+    ^-  card
+    [%give %fact ~[/suspects] %foes-update !>([%suspected accuser ship])]
   ==
 ::
-++  load
-  |=  =vase
-  ^+  that
-  ?>  ?=([%0 *] q.vase)
-  that(state !<(state-0 vase))
+++  on-peek
+  |=  =path
+  ^-  (unit (unit cage))
+  ?>  =(src.bowl our.bowl)
+  ?+    path  !!
+      [%x %enemies ~]  
+    ``noun+!>(enemies)
+  ::
+      [%x %enemies @ ~]
+    ``noun+!>((~(get by enemies) (need (slaw %p i.t.t.path))))
+  ::
+      [%x %suspects ~]
+    ``noun+!>(suspects)
+  ::
+      [%x %suspects @ ~]
+    ``noun+!>((~(get by suspects) (need (slaw %p i.t.t.path))))
+  ==
+::
+++  on-arvo  on-arvo:def
+++  on-fail   on-fail:def
+++  on-leave  on-leave:def
 --
