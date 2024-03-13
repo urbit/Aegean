@@ -53,8 +53,6 @@
   |=  =path
   ^-  (unit (unit cage))
   [~ ~]
-  ::?>  =(src.bowl our.bowl)
-  ::(peek:hc path)
 ::
 ++  on-agent
   |=  [=wire =sign:agent:gall]
@@ -86,6 +84,7 @@
 ++  init
   ^+  that
   %-  emit
+  ::  TO-DO  - subscribe to %foes too
   :*  %pass  /leeches  %agent
       [our.bowl %pals]  %watch  /leeches
   ==  
@@ -93,52 +92,54 @@
 ++  poke
   |=  [=mark =vase]
   ^+  that
-  ?+  mark  that
-    %feed-action
-      ?>  =(our.bowl src.bowl)
-      =/  act  (action !<(action vase))
-      (handle-action act)
-    %feed-message
-      =/  msg  (message !<(message vase))
-      (handle-message msg)
+  ?+    mark  that
+      %feed-action
+    ?>  =(our.bowl src.bowl)
+    (handle-action (action !<(action vase)))
+  ::
+      %feed-message
+    (handle-message (message !<(message vase)))
   ==
 ++  handle-action
   |=  act=action
   ^+  that
-  ?>  ?=(%broadcast -.act)
-  =/  hops  hops.signal.act
-  =/  post  post.signal.act
-  ::  ?> on -.post so that author is not blocked
-  ::  measure size of path to prevent DDoS
-  ::  ?>  (lte 256 (met 3 (jam post)))
-  =.  store  (~(put by store) post ~)
-  ::  TO-DO attempt to download the entry here
-  ?-    hops
-      %0
-    that
-  ::
-      %1
-    (emil (push-gossip [%0 post]))
-  ::
-      %2
-    (emil (push-gossip [%1 post]))
+  ?-    -.act
+      %create
+    ::  This should eventually take an [entry hops] and then grow a post.
+    ::  For now, just say that we're taking a [post hops]
+    =.  store  (~(put by store) post.act ~)
+    =/  sig  [post.act hops.act]  :: redundant until this takes entry
+    (broadcast sig)
   ==
 ::
-++  push-gossip
+++  handle-message
+  |=  msg=message
+  ^+  that
+  ?-    -.msg
+      %gossip
+    :: TO-DO ?> on -.post so that author is not blocked
+    ::  prevent malicious massive paths
+    ?>  (lte 256 (met 3 (jam post)))
+    =.  store  (~(put by store) post.signal.msg ~)
+    ::  start thread(?) to attempt to download
+    (broadcast signal.msg)
+  ==
+::
+++  broadcast
   |=  =signal
-  ^-  (list card)
+  ^+  that
+  ?:  =(hops.signal 0)
+    that
+  =/  sig  [post.signal (dec hops.signal)]
+  %-  emil
   %+  turn
     ~(tap in leeches)
   |=  =ship
   ^-  card
   :*  %pass  /gossip
       %agent  [ship %feed]
-      %poke  %feed-message  !>([%gossip signal])
+      %poke  %feed-message  !>([%gossip sig])
   ==
-::
-++  handle-message
-  |=  msg=message
-  ^+  that  that
 ::
 ++  agent
   |=  [=wire =sign:agent:gall]
@@ -160,14 +161,6 @@
       ==
     ==
   ==
-::
-::++  peek
-::  |=  =path
-::  ^-  (unit (unit cage))
-::  ?+    path  [~ ~]
-::      [%x %universe ~]
-::    ``explorer-universe+!>(universe)
-::  ==
 ::
 ++  load
   |=  =vase

@@ -1,15 +1,15 @@
 |%
 +$  signature  [p=@uvH q=ship r=life]
-+$  signal                   ::  what gets broadcast
-  $:
-    =hops
-    =post
-  ==
-+$  hops  ?(%0 %1 %2)        ::  do not allow >2 hops
-+$  post                     ::  FQSP such that mark is %entry
++$  signal  [=post =hops]      ::  what gets broadcast
++$  hops                       ::  do not allow >2 hops
+  $|  @ud
+  |=  n=@ud
+  (lte n 2)
++$  post                       ::  FQSP such that mark is %entry
   $|  path
   |=  =path
-  ?=  %entry  (rear path)        
+  ?=  %entry  (rear path)
+::
 ::  author in the head
 ::  require timestamp, other cases rejected
 ::  originating desk included
@@ -48,19 +48,18 @@
     =entry
   ==
 ::
-+$  action
-  $%
-    [%broadcast =signal]
++$  action  :: Called locally
+  $%  [%create =post =hops]  :: Grows the post and then broadcasts
+    ::  To-Do - %create should take an entry, not a post
     :: [%save =post]
     :: [%hide =post]
     :: [%boost =post]
     :: [%report =post]
     :: [%read =post]
   ==
-+$  message
-  $%
-    [%gossip =signal]
-    [%praise =entry]
-    [%tattle =evidence]
++$  message  :: Called from other ships
+  $%  [%gossip =signal]
+    ::[%praise =entry]
+    ::[%tattle =evidence]
   ==
 --
