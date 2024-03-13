@@ -176,9 +176,11 @@
         [%ames %tune *]
       =/  r=roar:ames  (need roar.sign-arvo)
       =/  p=path  p.dat.r
-      ::=/  c  (need q.dat.r)
+      =/  c=(cask)  (need q.dat.r)
+      ::  c is a [%entry *] 
+      ::  how do I cast * to %entry?
       ::=.  store
-      ::  (~(put by store) p c)
+      ::  (~(put by store) p +.c)
       that
     ==
   ==
