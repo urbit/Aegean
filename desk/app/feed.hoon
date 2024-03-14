@@ -13,6 +13,8 @@
     =store
     =saved
     =hidden
+    =boosts
+    =reports
   ==
 ::
 +$  card  $+(card card:agent:gall)
@@ -128,11 +130,38 @@
     =.  store  (~(put by store) ref [~ entry.act])
     (broadcast [ref hops.act])
   ::
+      %boost
+    (tell-leeches [%praise ref.act])
+  ::
+      %report
+    (tell-leeches [%tattle ref.act])
+  ::
       %save
     that(saved (~(put in saved) ref.act))
   ::
       %hide
     that(hidden (~(put in hidden) ref.act))
+  ==
+::
+++  broadcast
+  |=  =signal
+  ^+  that
+  ?:  =(hops.signal 0)
+    that
+  =/  sig  [ref.signal (dec hops.signal)]
+  (tell-leeches [%receive sig])
+::
+++  tell-leeches
+  |=  msg=message
+  ^+  that
+  %-  emil
+  %+  turn
+    ~(tap in leeches)
+  |=  =ship
+  ^-  card
+  :*  %pass  /messages
+      %agent  [ship %feed]
+      %poke  %feed-message  !>(msg)
   ==
 ::
 ++  handle-message
@@ -149,23 +178,23 @@
     =.  that  (emit [%pass /scry %arvo %a %keen author ref])
     =.  store  (~(put by store) ref ~)
     (broadcast signal.msg)
+  ::
+      %praise
+    that(boosts (update-mip boosts ref.msg))
+  ::
+      %tattle
+    that(reports (update-mip reports ref.msg))
   ==
 ::
-++  broadcast
-  |=  =signal
-  ^+  that
-  ?:  =(hops.signal 0)
-    that
-  =/  sig  [ref.signal (dec hops.signal)]
-  %-  emil
-  %+  turn
-    ~(tap in leeches)
-  |=  =ship
-  ^-  card
-  :*  %pass  /gossip
-      %agent  [ship %feed]
-      %poke  %feed-message  !>([%receive sig])
-  ==
+++  update-mip
+  |=  [m=(map ref (map ship @da)) =ref]
+  ^+  m
+  %+  ~(put by m)
+    ref
+  =/  n  (~(get by m) ref)
+  ?~  n
+    `(map @p @da)`(malt (limo [src.bowl now.bowl]~))
+  (~(put by (need n)) src.bowl now.bowl)
 ::
 ++  arvo
   |=  [=wire =sign-arvo]

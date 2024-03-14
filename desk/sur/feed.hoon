@@ -33,32 +33,33 @@
 ::
 +$  saved  (set ref)
 +$  hidden  (set ref)
-+$  boosts  (map ref [ship @da])  ::  ships who have boosted and when
++$  boosts  (map ref (map ship @da))  ::  ships who have boosted and when
 +$  store  (map ref (unit entry))  ::  the content that gets sorted
 ::  +$  sort  (map ref weight=@sd)
 ::  +$  fresh  (list [ref weight])  :: populated upon hearing new ref
 ::
-+$  locker  (set evidence)   ::  reported refs from friends
-+$  evidence
-  $:
-    mine=signature
-    %disavow
-    =ref
-    theirs=signature
-    =entry
-  ==
++$  reports  (map ref (map ship @da))  :: treating this as symmetrical to boosts for now
+::+$  locker  (set evidence)   ::  reported refs from friends
+::+$  evidence
+::  $:
+::    mine=signature
+::    %disavow
+::    =ref
+::    theirs=signature
+::    =entry
+::  ==
 ::
 +$  action  :: Called locally
   $%  [%create =entry =hops]  :: Grows a ref and then broadcasts
+      [%boost =ref]
+      [%report =ref]
       [%save =ref]
       [%hide =ref]
-    :: [%boost =ref]
-    :: [%report =ref]
     :: [%read =ref]  :: Activity tracking
   ==
 +$  message  :: Called from other ships
   $%  [%receive =signal]
-    ::[%praise =entry]
-    ::[%tattle =evidence]
+      [%praise =ref]
+      [%tattle =ref]
   ==
 --
