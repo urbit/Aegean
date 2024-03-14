@@ -204,13 +204,12 @@
     ?+    sign-arvo  that
         [%ames %tune *]
       =/  r=roar:ames  (need roar.sign-arvo)
+      ::  r is a [dat=[p=/ q=~] syg=~]
       =/  p=path  p.dat.r
       =/  c=(cask)  (need q.dat.r)
-      ::  c is a [%entry *] 
-      ::  how do I cast * to %entry?
-      ::=.  store
-      ::  (~(put by store) p +.c)
-      that
+      ::  c should be a [%entry *]
+      =/  e  ;;(entry +.c)
+      that(store (~(put by store) p [~ e]))
     ==
   ==
 ::
