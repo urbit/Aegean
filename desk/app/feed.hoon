@@ -108,6 +108,10 @@
       [our.bowl %foes]  %watch  /enemies
   == 
 ::
+++  scry-prefix  
+  ^-  path
+  [%g %x ~.0 %feed %$ ~]
+::
 ++  poke
   |=  [=mark =vase]
   ^+  that
@@ -126,8 +130,6 @@
   ?-    -.act
       %create
     =/  ref  /(scot %p our.bowl)/(scot %da now.bowl)/entry
-    ~&  >>  ref
-    ~&  >>  entry.act
     =.  that  (emit [%pass /growth %grow ref [%entry entry.act]])
     =.  store  (~(put by store) ref [~ entry.act])
     (broadcast [ref hops.act])
@@ -177,9 +179,7 @@
     =/  ref  ref.signal.msg
     ::?>  (lte 256 (met 3 (jam ref))) :: no huge refs
     =/  author=@p  (need (slaw %p -.ref))
-    ~&  >>  author
-    =/  paf  [%g %x ~.0 %feed %$ ref]
-    ~&  >>  paf
+    =/  paf  (weld scry-prefix ref)
     =.  that  (emit [%pass /scry %arvo %a %keen author paf])
     =.  store  (~(put by store) ref ~)
     (broadcast signal.msg)
@@ -204,21 +204,18 @@
 ++  arvo
   |=  [=wire =sign-arvo]
   ^+  that
-  ~&  >  'on-arvo'
   ?+    wire  that
       [%scry ~]
-    ~&  >  'scry'
     ?+    sign-arvo  that
         [%ames %tune *]
-      ~&  >  'tune'
       =/  r=roar:ames  (need roar.sign-arvo)
       ::  r is a [dat=[p=/ q=~] syg=~]
-      =/  p=path  p.dat.r
+      ::  %tune's return includes three additional knots
+      =/  prefix-length  (add (lent scry-prefix) 3)  
+      =/  p=path  (oust [0 prefix-length] p.dat.r)
       =/  c=(cask)  (need q.dat.r)
-      ~&  >  'got the cask'
       ::  c should be a [%entry *]
       =/  e  ;;(entry +.c)
-      ~&  >  'got the entry'
       that(store (~(put by store) p [~ e]))
     ==
   ==
