@@ -36,7 +36,7 @@
         ~(tap in tags.entry)
       |=  tag=@ta  [%s tag]
       ::
-      ::  Only handling [%media %url path] for now
+      ::  Only handling [%media %url @t] for now
       :-  %link
       ?~  link.entry  ~
       =/  rich  (need link.entry)

@@ -1,5 +1,6 @@
 /-  *feed, pals, foes
-/+  dbug, default-agent, feed-json
+/+  dbug, default-agent, feed-json, schooner, server
+/*  ui  %html  /app/feed/html
 ::
 |%
 ::
@@ -88,7 +89,13 @@
 ::
 ++  init
   ^+  that
-  (emil [leech-card target-card ~])
+  (emil [leech-card target-card enemy-card eyre-card ~])
+::
+++  eyre-card
+  ^-  card
+  :*  %pass  /eyre/connect  %arvo  %e 
+      %connect  [~ /apps/feed]  %feed 
+  ==
 ::
 ++  leech-card
   ^-  card
@@ -122,6 +129,9 @@
   ::
       %feed-message
     (handle-message (message !<(message vase)))
+  ::
+      %handle-http-request
+    (handle-http !<([@ta =inbound-request:eyre] vase))
   ==
 ::
 ++  handle-action
@@ -201,6 +211,55 @@
   ?~  n
     `(map @p @da)`(malt (limo [src.bowl now.bowl]~))
   (~(put by (need n)) src.bowl now.bowl)
+::
+++  handle-http
+  |=  [eyre-id=@ta =inbound-request:eyre]
+  ^+  that
+  ?>  =(our.bowl src.bowl)
+  =/  ,request-line:server
+    (parse-request-line:server url.request.inbound-request)
+  =+  send=(cury response:schooner eyre-id)
+  ::
+  ?+    method.request.inbound-request
+    (emil (flop (send [405 ~ [%stock ~]])))
+    ::
+    ::  %'POST'
+    ::?~  body.request.inbound-request  !!
+    ::?+    site
+    ::    (emil (flop (send [404 ~ [%plain "404 - Not Found"]])))
+    ::::
+    ::    [%apps %creator ~]
+    ::  =/  json  (de:json:html q.u.body.request.inbound-request)
+    ::  =/  act  (dejs-create-action +.json)
+    ::  =.  that  (handle-create-action act)
+    ::  (emil (flop (send [200 ~ [%none ~]])))
+    ::==
+    ::
+      %'GET'
+    %-  emil
+    %-  flop
+    %-  send
+    ?+    site  [404 ~ [%plain "404 - Not Found"]]
+    ::
+        [%apps %feed ~]
+      [200 ~ [%html ui]]
+    ::
+        [%apps %feed %json ~]
+      [200 ~ [%json (enjs-store:feed-json store)]]
+    ::
+    ::    [%apps %creator @ ~]
+    ::  =/  id  +14:site
+    ::  =/  app
+    ::    ^-  app:creator
+    ::    (~(got by apps) id)
+    ::  ?>  ?|  =(%.y published.app)
+    ::          =(src.bowl our.bowl)
+    ::      ==
+    ::  =/  fe  ui.app
+    ::  [200 ~ [%html fe]]
+    ::
+    ==  
+  ==
 ::
 ++  arvo
   |=  [=wire =sign-arvo]

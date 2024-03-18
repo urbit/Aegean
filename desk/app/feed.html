@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f2f5;
+    }
+    .post {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+      transition: box-shadow 0.3s ease;
+    }
+    .post:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .author {
+      font-weight: bold;
+      color: #365899;
+      margin-bottom: 5px;
+    }
+    .time {
+      font-size: 0.85em;
+      color: #606770;
+      margin-bottom: 10px;
+    }
+    .text {
+      margin-bottom: 10px;
+    }
+    .link-preview {
+      display: inline-block;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      text-decoration: none;
+      color: #365899;
+      background-color: #f6f7f9;
+      transition: background-color 0.3s ease;
+    }
+    .link-preview:hover {
+      background-color: #ebedf0;
+    }
+    .media-preview, .audio-preview {
+      width: 100%;
+      max-width: 500px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    async function getState() {
+      const response = await fetch('/apps/feed/json');
+      return response.json();
+    }
+
+    function getMediaType(link) {
+      if (/\.(jpeg|jpg|gif|png)$/.test(link)) return 'image';
+      if (/\.(mp4|webm)$/.test(link)) return 'video';
+      if (/\.(mp3|wav)$/.test(link)) return 'audio';
+      return 'link';
+    }
+
+    function renderLink(link) {
+      const mediaType = getMediaType(link);
+      switch (mediaType) {
+        case 'image':
+          return `<img src="${link}" class="media-preview">`;
+        case 'video':
+          return `<video src="${link}" controls class="media-preview"></video>`;
+        case 'audio':
+          return `<audio src="${link}" controls class="audio-preview"></audio>`;
+        default:
+          return `<a href="${link}" target="_blank" class="link-preview">${link}</a>`;
+      }
+    }
+
+    function renderPage(state) {
+      const postsContainer = document.createElement('div');
+      
+      const sortedKeys = Object.keys(state).sort((a, b) => state[b].time - state[a].time);
+      sortedKeys.forEach(key => {
+        const post = state[key];
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        
+        const timeString = new Date(post.time).toLocaleString();
+        postElement.innerHTML = `
+          <div class="author">${post.author}</div>
+          <div class="time">${timeString}</div>
+          <div class="text">${post.text}</div>
+          ${post.link ? renderLink(post.link) : ''}
+        `;
+
+        postsContainer.appendChild(postElement);
+      });
+
+      document.body.appendChild(postsContainer);
+    }
+
+    getState().then((state) => renderPage(state));
+  </script>
+</body>
+</html>
