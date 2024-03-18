@@ -28,7 +28,7 @@
   ==
 +$  preview  (map path cord) ::  OGP data
 +$  media
-  $%  [%url path]            ::  url with supported mime type
+  $%  [%url url=@t]            ::  url with supported mime type
       [%scry path]           ::  FQSP with supported datatype mark
   ==
 ::

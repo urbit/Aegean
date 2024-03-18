@@ -1,5 +1,5 @@
 /-  *feed, pals, foes
-/+  dbug, default-agent
+/+  dbug, default-agent, feed-json
 ::
 |%
 ::
@@ -135,6 +135,7 @@
     (broadcast [ref hops.act])
   ::
       %boost
+    =.  boosts  (update-mip boosts ref.act)
     (tell-leeches [%praise ref.act])
   ::
       %report
