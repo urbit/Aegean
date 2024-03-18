@@ -1,12 +1,12 @@
 /-  *feed
-|_  act=action
+|_  com=command
 ++  grad  %noun
 ++  grow
   |%
-  ++  noun  act
+  ++  noun  com
   --
 ++  grab
   |%
-  ++  noun  action
+  ++  noun  command
   --
 --

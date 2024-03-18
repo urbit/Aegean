@@ -7,7 +7,7 @@
   %+  turn
     ~(tap by store)
   |=  [=ref val=(unit entry)]
-  :-  (concatenate ref)
+  :-  (spat ref)
   ?~  val  ~
   (enjs-entry [ref (need val)])
 ::
@@ -28,7 +28,7 @@
       ::
       :-  %quote
       ?~  quote.entry  ~
-      [%s (concatenate (need quote.entry))]
+      [%s (spat (need quote.entry))]
       ::
       :-  %tags
       :-  %a
@@ -53,18 +53,14 @@
       ==
   ==
 ::
-++  concatenate
-  |=  =ref
-  ^-  @t
-  =/  author  -.ref
-  =/  date  +<.ref
-  ::  =/  desk  +>-.ref 
-  %-  crip
-  ;:  weld
-      (trip author)
-      "/"
-      (trip date)
-      :: "/"
-      :: (trip desk)
+++  dejs-action
+  |=  =json
+  ^-  interaction
+  %.  json
+  %-  of:dejs:format
+  :~  [%boost pa:dejs:format]
+      [%report pa:dejs:format]
+      [%save pa:dejs:format]
+      [%hide pa:dejs:format]
   ==
 --

@@ -50,9 +50,11 @@
 ::    =entry
 ::  ==
 ::
-+$  action  :: Called locally
++$  command  :: Backend pokes
   $%  [%create =entry =hops]  :: Grows a ref and then broadcasts
-      [%boost =ref]
+  ==
++$  interaction  :: Called by user from UI
+  $%  [%boost =ref]
       [%report =ref]
       [%save =ref]
       [%hide =ref]

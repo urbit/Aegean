@@ -123,27 +123,31 @@
   |=  [=mark =vase]
   ^+  that
   ?+    mark  that
-      %feed-action
+      %feed-interaction
     ?>  =(our.bowl src.bowl)
-    (handle-action (action !<(action vase)))
+    (handle-interaction (interaction !<(interaction vase)))
   ::
       %feed-message
     (handle-message (message !<(message vase)))
   ::
       %handle-http-request
     (handle-http !<([@ta =inbound-request:eyre] vase))
+  ::
+      %feed-command
+    =/  com  (command !<(command vase))
+    ?-    -.com
+        %create
+      =/  ref  /(scot %p our.bowl)/(scot %da now.bowl)/entry
+      =.  that  (emit [%pass /growth %grow ref [%entry entry.com]])
+      =.  store  (~(put by store) ref [~ entry.com])
+      (broadcast [ref hops.com])
+    ==
   ==
 ::
-++  handle-action
-  |=  act=action
+++  handle-interaction
+  |=  act=interaction
   ^+  that
   ?-    -.act
-      %create
-    =/  ref  /(scot %p our.bowl)/(scot %da now.bowl)/entry
-    =.  that  (emit [%pass /growth %grow ref [%entry entry.act]])
-    =.  store  (~(put by store) ref [~ entry.act])
-    (broadcast [ref hops.act])
-  ::
       %boost
     =.  boosts  (update-mip boosts ref.act)
     (tell-leeches [%praise ref.act])
