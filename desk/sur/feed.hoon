@@ -1,19 +1,20 @@
 |%
 +$  signature  [p=@uvH q=ship r=life]
 +$  signal  [=ref =hops]      ::  what gets broadcast
-+$  ref                       ::  FQSP such that mark is %entry
-  $|  path
-  |=  =path
-  ?=  %entry  (rear path)
++$  ref   path                    ::  FQSP such that mark is %entry
+  ::$|  path
+  ::|=  =path
+  ::?=  %entry  (rear path)
 ::  TO-DO that refs require:
 ::  - author in the head
-::  - require timestamp, other cases rejected
-::  - originating desk included
+::  - require past timestamp, other cases rejected
+::  - originating desk/agent included
+::  /zod/~2023.3.14..1.30.11..1234/feed/turf/entry
 ::
-+$  hops                       ::  do not allow >2 hops
-  $|  @ud
-  |=  n=@ud
-  (lte n 2)
++$  hops    @ud                   ::  do not allow >2 hops
+  ::$|  @ud
+  ::|=  n=@ud
+  ::(lte n 2)
 ::
 +$  entry                    ::  /mar/entry/hoon
   $:  text=(unit cord)       ::  max length 256 bytes
@@ -39,10 +40,10 @@
 ::  +$  fresh  (list [ref weight])  :: populated upon hearing new ref
 ::
 +$  reports  (map ref (map ship @da))  :: treating this as symmetrical to boosts for now
-::+$  locker  (set evidence)   ::  reported refs from friends
+::+$  locker  (map evidence @da)   ::  reported refs from friends
 ::+$  evidence
 ::  $:
-::    mine=signature
+::    mine=signature    ::  [p=@uvH q=ship r=life]
 ::    %disavow
 ::    =ref
 ::    theirs=signature

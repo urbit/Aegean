@@ -6,22 +6,22 @@
 +$  versioned-state  $%(state-0)
 ::
 +$  state-0  
-  $:
-    leeches=(set ship)
-    targets=(set ship)
-    enemies=(set ship)
-    =store
-    =saved
-    =hidden
-    =boosts
-    =reports
+  $:  %0
+      leeches=(set ship)
+      targets=(set ship)
+      enemies=(set ship)
+      =store
+      =saved
+      =hidden
+      =boosts
+      =reports
   ==
 ::
 +$  card  $+(card card:agent:gall)
 --
 ::
 %-  agent:dbug
-=|  versioned-state
+=|  state-0
 =*  state  -
 ::
 ^-  agent:gall
@@ -126,6 +126,8 @@
   ?-    -.act
       %create
     =/  ref  /(scot %p our.bowl)/(scot %da now.bowl)/entry
+    ~&  >>  ref
+    ~&  >>  entry.act
     =.  that  (emit [%pass /growth %grow ref [%entry entry.act]])
     =.  store  (~(put by store) ref [~ entry.act])
     (broadcast [ref hops.act])
@@ -168,14 +170,17 @@
   |=  msg=message
   ^+  that
   ?>  ?&  (~(has in targets) src.bowl)
-          ?!  (~(has in enemies) src.bowl)
+          ?!  (~(has in enemies) src.bowl)  :: block the author
       ==
   ?-    -.msg
       %receive
     =/  ref  ref.signal.msg
-    ?>  (lte 256 (met 3 (jam ref))) :: no huge refs
+    ::?>  (lte 256 (met 3 (jam ref))) :: no huge refs
     =/  author=@p  (need (slaw %p -.ref))
-    =.  that  (emit [%pass /scry %arvo %a %keen author ref])
+    ~&  >>  author
+    =/  paf  [%g %x ~.0 %feed %$ ref]
+    ~&  >>  paf
+    =.  that  (emit [%pass /scry %arvo %a %keen author paf])
     =.  store  (~(put by store) ref ~)
     (broadcast signal.msg)
   ::
@@ -199,16 +204,21 @@
 ++  arvo
   |=  [=wire =sign-arvo]
   ^+  that
+  ~&  >  'on-arvo'
   ?+    wire  that
       [%scry ~]
+    ~&  >  'scry'
     ?+    sign-arvo  that
         [%ames %tune *]
+      ~&  >  'tune'
       =/  r=roar:ames  (need roar.sign-arvo)
       ::  r is a [dat=[p=/ q=~] syg=~]
       =/  p=path  p.dat.r
       =/  c=(cask)  (need q.dat.r)
+      ~&  >  'got the cask'
       ::  c should be a [%entry *]
       =/  e  ;;(entry +.c)
+      ~&  >  'got the entry'
       that(store (~(put by store) p [~ e]))
     ==
   ==
@@ -223,14 +233,16 @@
       (emit leech-card)
     ::
         %fact
-      ?>  =(p.cage.sign %leeche-effect)
-      =/  new  !<(effect:pals q.cage.sign)
-      ?+    -.new  that
-          %near
-        that(leeches (~(put in leeches) ship.new))
-      ::
-          %away
-        that(leeches (~(del in leeches) ship.new))
+      ?+    p.cage.sign  that
+          %pals-effect
+        =/  new  !<(effect:pals q.cage.sign)
+        ?+    -.new  that
+            %near
+          that(leeches (~(put in leeches) ship.new))
+        ::
+            %away
+          that(leeches (~(del in leeches) ship.new))
+        ==
       ==
     ==
   ::
@@ -240,14 +252,16 @@
       (emit target-card)
     ::
         %fact
-      ?>  =(p.cage.sign %target-effect)
-      =/  new  !<(effect:pals q.cage.sign)
-      ?+    -.new  that
-          %meet
-        that(targets (~(put in targets) ship.new))
-      ::
-          %part
-        that(targets (~(del in targets) ship.new))
+      ?+    p.cage.sign  that
+          %pals-effect
+        =/  new  !<(effect:pals q.cage.sign)
+        ?+    -.new  that
+            %meet
+          that(targets (~(put in targets) ship.new))
+        ::
+            %part
+          that(targets (~(del in targets) ship.new))
+        ==
       ==
     ==
     ::
@@ -257,14 +271,16 @@
       (emit enemy-card)
     ::
         %fact
-      ?>  =(p.cage.sign %foes-update)
-      =/  new  !<(update:foes q.cage.sign)
-      ?+    -.new  that
-          %accuse
-        that(enemies (~(put in enemies) ship.new))
-      ::
-          %unaccuse
-        that(enemies (~(del in enemies) ship.new))
+      ?+    p.cage.sign  that
+          %foes-update
+        =/  new  !<(update:foes q.cage.sign)
+        ?+    -.new  that
+            %accuse
+          that(enemies (~(put in enemies) ship.new))
+        ::
+            %unaccuse
+          that(enemies (~(del in enemies) ship.new))
+        ==
       ==
     ==
   ==

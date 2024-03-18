@@ -1,0 +1,9 @@
+:~  title+'Feed'
+    info+'Prototype for the future of Urbit'
+    color+0x11.1111
+    base+'feed'
+    site+/apps/feed
+    version+[0 0 1]
+    website+'https://urbit.org'
+    license+'MIT'
+==

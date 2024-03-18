@@ -104,15 +104,15 @@
 ++  on-agent
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
-  ?+    wire  !!
+  ?+    wire  (on-agent:def wire sign)
       [%targets ~]
-    ?+    -.sign  !!
+    ?+    -.sign  (on-agent:def wire sign)
         %fact
-      ?+    p.cage.sign  !!
+      ?+    p.cage.sign  (on-agent:def wire sign)
           %pals-effect
         =/  effect
           !<(effect:pals q.cage.sign)
-        ?+    -.effect  !!
+        ?+    -.effect  (on-agent:def wire sign)
             %meet
           :_  this
           :~  :*  %pass  /accusations  %agent 
@@ -134,7 +134,7 @@
     ==
   ::
       [%accusations ~]
-    ?+    -.sign  !!
+    ?+    -.sign  (on-agent:def wire sign)
         %kick
       :_  this
       :~  :*  %pass  /accusations  %agent 
@@ -145,7 +145,7 @@
         %fact
       ?>  =(p.cage.sign %foes-update)
       =/  upd  !<(update q.cage.sign)
-      ?+    -.upd  !!
+      ?+    -.upd  (on-agent:def wire sign)
           %accuse
         :-  :~  :*  %give  %fact  ~[/suspects] 
                     %foes-update  !>([%suspected src.bowl ship.upd])
