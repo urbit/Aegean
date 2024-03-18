@@ -53,7 +53,7 @@
       ==
   ==
 ::
-++  dejs-action
+++  dejs-interaction
   |=  =json
   ^-  interaction
   %.  json

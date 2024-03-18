@@ -227,17 +227,17 @@
   ?+    method.request.inbound-request
     (emil (flop (send [405 ~ [%stock ~]])))
     ::
-    ::  %'POST'
-    ::?~  body.request.inbound-request  !!
-    ::?+    site
-    ::    (emil (flop (send [404 ~ [%plain "404 - Not Found"]])))
-    ::::
-    ::    [%apps %creator ~]
-    ::  =/  json  (de:json:html q.u.body.request.inbound-request)
-    ::  =/  act  (dejs-create-action +.json)
-    ::  =.  that  (handle-create-action act)
-    ::  (emil (flop (send [200 ~ [%none ~]])))
-    ::==
+      %'POST'
+    ?~  body.request.inbound-request  !!
+    ?+    site
+        (emil (flop (send [404 ~ [%plain "404 - Not Found"]])))
+    ::
+        [%apps %feed ~]
+      =/  json  (de:json:html q.u.body.request.inbound-request)
+      =/  act  (dejs-interaction:feed-json +.json)
+      =.  that  (handle-interaction act)
+      (emil (flop (send [200 ~ [%none ~]])))
+    ==
     ::
       %'GET'
     %-  emil
