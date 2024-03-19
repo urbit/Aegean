@@ -31,7 +31,7 @@
 ::
 +$  versioned-state  $%(state-0)
 ::
-+$  state-0  [%0 =suspects =enemies public=?]
++$  state-0  [%0 =suspects =enemies targets=(set @p) public=?]
 ::
 +$  card  $+(card card:agent:gall)
 --
@@ -114,14 +114,14 @@
           !<(effect:pals q.cage.sign)
         ?+    -.effect  (on-agent:def wire sign)
             %meet
-          :_  this
+          :_  this(targets (~(put in targets) ship.effect))
           :~  :*  %pass  /accusations  %agent 
                   [ship.effect %foes]  %watch  /enemies
               ==
           ==
         ::
             %part
-          :_  this
+          :_  this(targets (~(del in targets) ship.effect))
           =/  leave
             :*  %pass  /accusations  %agent
                 [ship.effect %foes]  %leave  ~
@@ -177,11 +177,7 @@
   ?+    path  !!
       [%enemies ~]
     ?>  ?|  =(public %.y)
-        ::
-            %.  src.bowl
-            %~  has
-              in
-            .^((set @p) %gx /=pals=/targets)
+            (~(has in targets) src.bowl)
         ==
     :_  this
     =/  cards
