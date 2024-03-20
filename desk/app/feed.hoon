@@ -256,21 +256,9 @@
       [200 ~ [%html ui]]
     ::
         [%apps %feed %json ~]
-      [200 ~ [%json (enjs-store store)]]
-    ::
-    ::    [%apps %creator @ ~]
-    ::  =/  id  +14:site
-    ::  =/  app
-    ::    ^-  app:creator
-    ::    (~(got by apps) id)
-    ::  ?>  ?|  =(%.y published.app)
-    ::          =(src.bowl our.bowl)
-    ::      ==
-    ::  =/  fe  ui.app
-    ::  [200 ~ [%html fe]]
-    ::
+      [200 ~ [%json (enjs-store [store hidden])]]
     ==  
-  ==
+  ==  
 ::
 ++  arvo
   |=  [=wire =sign-arvo]

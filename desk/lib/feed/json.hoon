@@ -2,7 +2,7 @@
 /+  *feed-ref
 |%
 ++  enjs-store
-  |=  =store
+  |=  [=store =hidden]
   ^-  json
   %-  pairs:enjs:format
   %+  turn
@@ -10,6 +10,7 @@
   |=  [=ref val=(unit entry)]
   :-  (spat (ref-to-path ref))
   ?~  val  ~
+  ?:  (~(has in hidden) ref)  ~
   (enjs-entry [ref (need val)])
 ::
 ++  enjs-entry
