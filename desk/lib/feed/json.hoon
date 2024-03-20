@@ -1,4 +1,5 @@
 /-  *feed
+/+  *feed-ref
 |%
 ++  enjs-store
   |=  =store
@@ -7,19 +8,17 @@
   %+  turn
     ~(tap by store)
   |=  [=ref val=(unit entry)]
-  :-  (spat ref)
+  :-  (spat (ref-to-path ref))
   ?~  val  ~
   (enjs-entry [ref (need val)])
 ::
 ++  enjs-entry
   |=  [=ref =entry]
   ^-  json
-  =/  author  -.ref
-  =/  date=@da  (need (slaw %da +<.ref))
   ::  =/  desk  +>-.ref 
   %-  pairs:enjs:format
-  :~  [%author [%s author]]
-      [%time (time:enjs:format date)]
+  :~  [%author [%s (scot %p author.ref)]]
+      [%time (time:enjs:format time.ref)]
       ::  [%desk [%s desk]]
       ::
       :-  %text
@@ -28,7 +27,7 @@
       ::
       :-  %quote
       ?~  quote.entry  ~
-      [%s (spat (need quote.entry))]
+      [%s (spat (ref-to-path (need quote.entry)))]
       ::
       :-  %tags
       :-  %a

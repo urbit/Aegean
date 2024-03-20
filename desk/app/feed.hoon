@@ -1,5 +1,5 @@
 /-  *feed, pals, foes
-/+  dbug, default-agent, feed-json, schooner, server
+/+  dbug, default-agent, *feed-json, *feed-ref, schooner, server
 /*  ui  %html  /app/feed/html
 ::
 |%
@@ -15,7 +15,6 @@
       =saved
       =hidden
       =boosts
-      =reports
   ==
 ::
 +$  card  $+(card card:agent:gall)
@@ -137,29 +136,36 @@
     =/  com  (command !<(command vase))
     ?-    -.com
         %create
-      =/  ref  /(scot %p our.bowl)/(scot %da now.bowl)/entry
-      =.  that  (emit [%pass /growth %grow ref [%entry entry.com]])
-      =.  store  (~(put by store) ref [~ entry.com])
-      (broadcast [ref hops.com])
+      =/  r
+        :*  our.bowl
+            now.bowl
+            dap.bowl
+            %entry
+        ==
+      =/  p  (ref-to-path r)
+      =.  that  (emit [%pass /growth %grow p [%entry entry.com]])
+      =.  store  (~(put by store) r [~ entry.com])
+      (broadcast [r hops.com])
     ==
   ==
 ::
 ++  handle-interaction
   |=  act=interaction
   ^+  that
+  =/  r  (path-to-ref path.act)
   ?-    -.act
       %boost
-    =.  boosts  (update-mip boosts ref.act)
-    (tell-leeches [%praise ref.act])
+    =.  boosts  (add-boost r)
+    (tell-leeches [%praise r])
   ::
       %report
-    (tell-leeches [%tattle ref.act])
+    that
   ::
       %save
-    that(saved (~(put in saved) ref.act))
+    that(saved (~(put in saved) r))
   ::
       %hide
-    that(hidden (~(put in hidden) ref.act))
+    that(hidden (~(put in hidden) r))
   ==
 ::
 ++  broadcast
@@ -167,7 +173,8 @@
   ^+  that
   ?:  =(hops.signal 0)
     that
-  =/  sig  [ref.signal (dec hops.signal)]
+  =/  h   ?:((gth hops.signal 2) 2 hops.signal)
+  =/  sig  [ref.signal (dec h)]
   (tell-leeches [%receive sig])
 ::
 ++  tell-leeches
@@ -192,26 +199,25 @@
   ?-    -.msg
       %receive
     =/  ref  ref.signal.msg
-    ::?>  (lte 256 (met 3 (jam ref))) :: no huge refs
-    =/  author=@p  (need (slaw %p -.ref))
-    =/  paf  (weld scry-prefix ref)
-    =.  that  (emit [%pass /scry %arvo %a %keen author paf])
+    ?>  (lte hops.signal.msg 2)  :: reject hop hackers
+    =/  paf  (weld scry-prefix (ref-to-path ref))
+    =.  that  (emit [%pass /scry %arvo %a %keen author.ref paf])
     =.  store  (~(put by store) ref ~)
     (broadcast signal.msg)
   ::
       %praise
-    that(boosts (update-mip boosts ref.msg))
+    that(boosts (add-boost ref.msg))
   ::
       %tattle
-    that(reports (update-mip reports ref.msg))
+    that
   ==
 ::
-++  update-mip
-  |=  [m=(map ref (map ship @da)) =ref]
-  ^+  m
-  %+  ~(put by m)
+++  add-boost
+  |=  =ref
+  ^+  boosts
+  %+  ~(put by boosts)
     ref
-  =/  n  (~(get by m) ref)
+  =/  n  (~(get by boosts) ref)
   ?~  n
     `(map @p @da)`(malt (limo [src.bowl now.bowl]~))
   (~(put by (need n)) src.bowl now.bowl)
@@ -234,7 +240,7 @@
     ::
         [%apps %feed ~]
       =/  json  (de:json:html q.u.body.request.inbound-request)
-      =/  act  (dejs-interaction:feed-json +.json)
+      =/  act  (dejs-interaction +.json)
       =.  that  (handle-interaction act)
       (emil (flop (send [200 ~ [%none ~]])))
     ==
@@ -249,7 +255,7 @@
       [200 ~ [%html ui]]
     ::
         [%apps %feed %json ~]
-      [200 ~ [%json (enjs-store:feed-json store)]]
+      [200 ~ [%json (enjs-store store)]]
     ::
     ::    [%apps %creator @ ~]
     ::  =/  id  +14:site
@@ -277,10 +283,11 @@
       ::  %tune's return includes three additional knots
       =/  prefix-length  (add (lent scry-prefix) 3)  
       =/  p=path  (oust [0 prefix-length] p.dat.r)
+      =/  =ref  (path-to-ref p)
       =/  c=(cask)  (need q.dat.r)
       ::  c should be a [%entry *]
       =/  e  ;;(entry +.c)
-      that(store (~(put by store) p [~ e]))
+      that(store (~(put by store) ref [~ e]))
     ==
   ==
 ::

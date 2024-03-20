@@ -1,20 +1,25 @@
 |%
 +$  signature  [p=@uvH q=ship r=life]
 +$  signal  [=ref =hops]      ::  what gets broadcast
-+$  ref   path                    ::  FQSP such that mark is %entry
++$  ref                       ::  FQSP such that mark is %entry
+  $:  author=@p
+      time=@da
+      agent=@tas
+      %entry
+  ==
   ::$|  path
-  ::|=  =path
-  ::?=  %entry  (rear path)
-::  TO-DO that refs require:
-::  - author in the head
-::  - require past timestamp, other cases rejected
-::  - originating desk/agent included
-::  /zod/~2023.3.14..1.30.11..1234/feed/turf/entry
+  ::|=  p=path
+  ::~&  >>  'checking'
+  ::~&  >>  p
+  ::~&  >>  -.p
+  ::=+  (slav %p -.p)
+  ::=+  (slav %da +<.p)       :: should probably sanity-check time too
+  ::=+  (slav %tas +>-.p)
+  ::?&  =(+>+<.p %entry)
+  ::    =((lent p) (lent [%author %time %agent %entry ~]))
+  ::==
 ::
-+$  hops    @ud                   ::  do not allow >2 hops
-  ::$|  @ud
-  ::|=  n=@ud
-  ::(lte n 2)
++$  hops  @ud                ::  do not allow >2 hops
 ::
 +$  entry                    ::  /mar/entry/hoon
   $:  text=(unit cord)       ::  max length 256 bytes
@@ -28,8 +33,8 @@
   ==
 +$  preview  (map path cord) ::  OGP data
 +$  media
-  $%  [%url url=@t]            ::  url with supported mime type
-      [%scry path]           ::  FQSP with supported datatype mark
+  $%  [%url url=@t]        ::  url with supported mime type
+      [%scry =path]        ::  FQSP with supported datatype mark
   ==
 ::
 +$  saved  (set ref)
@@ -39,26 +44,24 @@
 ::  +$  sort  (map ref weight=@sd)
 ::  +$  fresh  (list [ref weight])  :: populated upon hearing new ref
 ::
-+$  reports  (map ref (map ship @da))  :: treating this as symmetrical to boosts for now
-::+$  locker  (map evidence @da)   ::  reported refs from friends
-::+$  evidence
-::  $:
-::    mine=signature    ::  [p=@uvH q=ship r=life]
-::    %disavow
-::    =ref
-::    theirs=signature
-::    =entry
-::  ==
++$  locker  (map evidence @da)   ::  reported refs from friends
++$  evidence
+  $:  mine=signature    ::  [p=@uvH q=ship r=life]
+      %disavow
+      =ref
+      theirs=signature
+      =entry
+  ==
 ::
 +$  command  :: Backend pokes
   $%  [%create =entry =hops]  :: Grows a ref and then broadcasts
   ==
 +$  interaction  :: Called by user from UI
-  $%  [%boost =ref]
-      [%report =ref]
-      [%save =ref]
-      [%hide =ref]
-    :: [%read =ref]  :: Activity tracking
+  $%  [%boost =path]
+      [%report =path]
+      [%save =path]
+      [%hide =path]
+    :: [%read =path]  :: Activity tracking
   ==
 +$  message  :: Called from other ships
   $%  [%receive =signal]
