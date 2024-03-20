@@ -15,6 +15,7 @@
       =saved
       =hidden
       =boosts
+      =locker
   ==
 ::
 +$  card  $+(card card:agent:gall)
@@ -160,7 +161,7 @@
     (tell-leeches [%praise r])
   ::
       %report
-    that
+    (emit [%pass /report %arvo %a %keen author.r path.act])
   ::
       %save
     that(saved (~(put in saved) r))
@@ -210,7 +211,7 @@
     that(boosts (add-boost ref.msg))
   ::
       %tattle
-    that
+    that(locker (~(put by locker) [src.bowl evidence.msg] now.bowl))
   ==
 ::
 ++  add-boost
@@ -267,17 +268,36 @@
       [%scry ~]
     ?+    sign-arvo  that
         [%ames %tune *]
-      =/  r=roar:ames  (need roar.sign-arvo)
-      ::  r is a [dat=[p=/ q=~] syg=~]
+      =/  =roar:ames  (need roar.sign-arvo)
+      ::  roar is a [dat=[p=/ q=~] syg=~]
       ::  %tune's return includes three additional knots
       ::  on top of scry-prefix's return value.
       =/  prefix-length  (add (lent (scry-prefix now.bowl)) 3)  
-      =/  p=path  (oust [0 prefix-length] p.dat.r)
-      =/  =ref  (path-to-ref p)
-      =/  c=(cask)  (need q.dat.r)
+      =/  =path  (oust [0 prefix-length] p.dat.roar)
+      =/  =ref  (path-to-ref path)
+      =/  c=(cask)  (need q.dat.roar)
       ::  c should be a [%entry *]
-      =/  e  ;;(entry +.c)
-      that(store (~(put by store) ref [~ e]))
+      =/  =entry  ;;(entry +.c)
+      that(store (~(put by store) ref [~ entry]))
+    ==
+    ::
+      [%report ~]
+    ?+    sign-arvo  that
+        [%ames %tune *]
+      =/  =roar:ames  (need roar.sign-arvo)
+      =/  prefix-length  (add (lent (scry-prefix now.bowl)) 3)  
+      =/  =path  (oust [0 prefix-length] p.dat.roar)
+      =/  =ref  (path-to-ref path)
+      =/  c=(cask)  (need q.dat.roar)
+      =/  =entry  ;;(entry +.c)
+      =/  evidence
+        :*  %disavow
+            ref
+            syg.roar
+            entry
+        ==
+      =.  locker  (~(put by locker) [our.bowl evidence] now.bowl)
+      (tell-leeches [%tattle evidence])
     ==
   ==
 ::

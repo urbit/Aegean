@@ -1,5 +1,5 @@
 |%
-+$  signature  [p=@uvH q=ship r=life]
++$  signature  (map ship (pair life oath:pki:jael))
 +$  signal  [=ref =hops]      ::  what gets broadcast
 +$  hops  @ud                 ::  >2 hops are disallowed by agent
 +$  ref                       ::  FQSP such that mark is %entry
@@ -30,9 +30,9 @@
   ==
 ::
 +$  boosts  (map ref (map ship @da))  ::  ships who have boosted and when
-+$  locker  (map evidence @da)   ::  reported refs from friends
++$  locker  (map [ship evidence] @da) ::  reported refs from friends
 +$  evidence
-  $:  mine=signature    ::  [p=@uvH q=ship r=life]
+  $:  ::mine=signature
       %disavow
       =ref
       theirs=signature
@@ -52,6 +52,6 @@
 +$  message  :: Called from other ships
   $%  [%receive =signal]
       [%praise =ref]
-      [%tattle =ref]
+      [%tattle =evidence]
   ==
 --
