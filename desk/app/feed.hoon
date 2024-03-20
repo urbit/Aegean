@@ -114,9 +114,10 @@
       [our.bowl %foes]  %watch  /enemies
   == 
 ::
-++  scry-prefix  
+++  scry-prefix 
+  |=  time=@da
   ^-  path
-  [%g %x ~.0 %feed %$ ~]
+  [%g %x (scot %da time) %feed %$ ~]
 ::
 ++  poke
   |=  [=mark =vase]
@@ -200,7 +201,7 @@
       %receive
     =/  ref  ref.signal.msg
     ?>  (lte hops.signal.msg 2)  :: reject hop hackers
-    =/  paf  (weld scry-prefix (ref-to-path ref))
+    =/  paf  (weld (scry-prefix time.ref) (ref-to-path ref))
     =.  that  (emit [%pass /scry %arvo %a %keen author.ref paf])
     =.  store  (~(put by store) ref ~)
     (broadcast signal.msg)
@@ -281,7 +282,8 @@
       =/  r=roar:ames  (need roar.sign-arvo)
       ::  r is a [dat=[p=/ q=~] syg=~]
       ::  %tune's return includes three additional knots
-      =/  prefix-length  (add (lent scry-prefix) 3)  
+      ::  on top of scry-prefix's return value.
+      =/  prefix-length  (add (lent (scry-prefix now.bowl)) 3)  
       =/  p=path  (oust [0 prefix-length] p.dat.r)
       =/  =ref  (path-to-ref p)
       =/  c=(cask)  (need q.dat.r)
