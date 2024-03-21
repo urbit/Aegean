@@ -161,7 +161,9 @@
     (tell-leeches [%praise r])
   ::
       %report
-    (emit [%pass /report %arvo %a %keen author.r path.act])
+    ~&  >  'report poke'
+    =/  paf  (weld (scry-prefix time.r) path.act)
+    (emit [%pass /report %arvo %a %keen author.r paf])
   ::
       %save
     that(saved (~(put in saved) r))
@@ -211,7 +213,7 @@
     that(boosts (add-boost ref.msg))
   ::
       %tattle
-    that(locker (~(put by locker) [src.bowl evidence.msg] now.bowl))
+    that(locker (~(put by locker) evidence.msg now.bowl))
   ==
 ::
 ++  add-boost
@@ -284,19 +286,30 @@
       [%report ~]
     ?+    sign-arvo  that
         [%ames %tune *]
+      ~&  >  'got tune'
       =/  =roar:ames  (need roar.sign-arvo)
       =/  prefix-length  (add (lent (scry-prefix now.bowl)) 3)  
       =/  =path  (oust [0 prefix-length] p.dat.roar)
       =/  =ref  (path-to-ref path)
       =/  c=(cask)  (need q.dat.roar)
       =/  =entry  ;;(entry +.c)
-      =/  evidence
-        :*  %disavow
-            ref
-            syg.roar
-            entry
-        ==
-      =.  locker  (~(put by locker) [our.bowl evidence] now.bowl)
+      =/  =proof  [%disavow ref syg.roar entry]
+      ~&  >  'made proof'
+      ::
+      =/  life  .^(@ud %j /=life=/(scot %p our.bowl))
+      ~&  >  'got life'
+      =/  key   .^(@uw %j /=vein=/(scot %ud life))
+      ~&  >  'got key'
+      =/  crub  (nol:nu:crub:crypto key)
+      ~&  >  'made crub'
+      =/  oath  (sigh:as:crub (jam proof))
+      ~&  >  'made oath'
+      =/  sig   
+        `signature`(malt (limo [our.bowl [life oath]]~))
+      ~&  >  'made signature'
+      ::
+      =/  evidence  [sig proof]
+      =.  locker  (~(put by locker) evidence now.bowl)
       (tell-leeches [%tattle evidence])
     ==
   ==
