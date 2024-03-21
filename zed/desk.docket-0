@@ -1,0 +1,9 @@
+:~
+  title+'zed'
+  info+'microblog for the pals gossip network'
+  color+0x4e.70a1
+  version+[0 0 0]
+  website+'https://migrev-dolseg.com/feeds/zed'
+  license+'karma'
+  site+/zed
+==

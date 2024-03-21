@@ -1,0 +1,386 @@
+/**    lexi.css
+  *      ~2024.3.9
+  *
+  *    styling resets
+  *    and
+  *    utility classes
+  *
+  **/
+* {
+  box-sizing: border-box;
+  font-size: 100%;
+  vertical-align: baseline;
+  font: inherit;
+  border: none;
+  margin: 0;
+}
+html {
+  height: 100%;
+  font-size: 16px;
+}
+body {
+  margin: 0;
+  font-family: Verdana, Tahoma, sans-serif;
+  line-height: 1;
+  background-color: var(--b0);
+  color: var(--f1);
+  height: 100%;
+}
+a {
+  text-decoration: none;
+}
+.break {
+  word-break: break-word;
+}
+.hidden,
+.folded {
+  display: none !important;
+}
+.jc {
+  justify-content: center;
+}
+.jb {
+  justify-content: space-between;
+}
+.ja {
+  justify-content: space-around;
+}
+.js {
+  justify-content: start;
+}
+.je {
+  justify-content: end;
+}
+.js {
+  justify-content: start;
+}
+.as {
+  align-items: start;
+}
+.af {
+  align-items: stretch;
+}
+.ae {
+  align-items: end;
+}
+.ac {
+  align-items: center;
+}
+.wfc {
+  width: fit-content;
+}
+.wf {
+  width: 100%;
+}
+.hf {
+  height: 100%;
+}
+.hfc {
+  height: fit-content;
+}
+.mono {
+  font-family: monospace;
+}
+.bold {
+  font-weight: bold;
+}
+.pre {
+  white-space: pre;
+}
+.pre-line {
+  white-space: pre-line;
+}
+.tl {
+  text-align: left;
+}
+.tc {
+  text-align: center;
+}
+.tr {
+  text-align: right;
+}
+.block {
+  display: block;
+}
+.expander {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 400ms;
+}
+.expander.open {
+  grid-template-rows: 1fr;
+}
+.expandable {
+  min-height: 0;
+}
+.fade {
+  transition: color 400ms;
+  transition: filter 400ms;
+}
+.fc {
+  display: flex;
+  flex-direction: column;
+}
+.fr {
+  display: flex;
+  flex-direction: row;
+}
+.frw {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.relative {
+  position: relative;
+}
+.absolute {
+  position: absolute;
+}
+.fixed {
+  position: fixed;
+}
+.z-2 {
+  z-index: -20;
+}
+.z-1 {
+  z-index: -10;
+}
+.z0 {
+  z-index: 0;
+}
+.z1 {
+  z-index: 10;
+}
+.z2 {
+  z-index: 20;
+}
+.grow {
+  flex-grow: 1;
+}
+.g1 {
+  gap: 4px;
+}
+.g2 {
+  gap: 8px;
+}
+.g3 {
+  gap: 12px;
+}
+.g4 {
+  gap: 16px;
+}
+.g5 {
+  gap: 20px;
+}
+.g6 {
+  gap: 24px;
+}
+.g7 {
+  gap: 28px;
+}
+.p1 {
+  padding: 4px;
+}
+.p2 {
+  padding: 8px;
+}
+.p3 {
+  padding: 12px;
+}
+.p4 {
+  padding: 16px;
+}
+.p-page {
+  padding-top: 30px;
+  padding-bottom: 200px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.ma {
+  margin: auto;
+}
+.scroll-y {
+  overflow-y: auto;
+}
+.scroll-x {
+  overflow-x: auto;
+}
+.loader {
+  position: relative;
+}
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.loader .loading {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+.htmx-request .loader .loading,
+.loader.htmx-request .loading {
+  opacity: 1;
+}
+.loader .loaded {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.htmx-request .loader .loaded,
+.loader.htmx-request .loaded {
+  opacity: 0;
+}
+.f1 {
+  color: var(--f1);
+}
+.f2 {
+  color: var(--f2);
+}
+.f3 {
+  color: var(--f3);
+}
+.f-success {
+  color: var(--f-success);
+}
+.f-error {
+  color: var(--f-error);
+}
+.b0 {
+  background-color: var(--b0);
+}
+.b1 {
+  background-color: var(--b1);
+}
+.b2 {
+  background-color: var(--b2);
+}
+.b3 {
+  background-color: var(--b3);
+}
+.b-success {
+  background-color: var(--b-success);
+}
+.b-error {
+  background-color: var(--b-error);
+}
+.s-2 {
+  font-size: 0.7em;
+  }
+.s-1 {
+  font-size: 0.85em;
+}
+.s0 {
+  font-size: 1em;
+}
+.s1 {
+  font-size: 1.15em;
+}
+.s2 {
+  font-size: 1.3em;
+}
+.s3 {
+  font-size: 1.45em;
+}
+.s4 {
+  font-size: 1.6em;
+}
+.border {
+  border: 1.2px solid var(--f3);
+}
+.border-2 {
+  border: 1px solid var(--f4);
+}
+.br1 {
+  border-radius: 3px;
+}
+.br2 {
+  border-radius: 6px;
+}
+input,
+select {
+  outline: none;
+  border-radius: 0;
+  background-color: inherit;
+  color: inherit;
+}
+textarea {
+  display: block;
+  resize: none;
+  outline: none;
+  border-radius: 0;
+  border: 0;
+  background-color: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+  background-color: inherit;
+  color: inherit;
+}
+button[disabled] {
+  pointer-events: none;
+  filter: brightness(90%);
+}
+.hover:hover {
+  filter: invert(10%);
+}
+.active,
+.selected {
+  filter: invert(90%);
+}
+.active:hover,
+.selected:hover {
+  filter: invert(100%);
+}
+.prose h1 {
+  font-size: 1.45rem;
+  margin: 1rem 0;
+}
+.prose h2 {
+  font-size: 1.3rem;
+  margin: 1rem 0;
+}
+.prose h3 {
+  font-size: 1.15rem;
+  margin: 1rem 0;
+}
+.prose h1, .prose h2, .prose h3 {
+  font-weight: bold;
+}
+.prose p {
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+.prose details {
+  margin-bottom: 1rem;
+}
+.prose code {
+  white-space: pre;
+  overflow-x: auto;
+  width: 100%;
+  display: block;
+  padding: 8px;
+}
+.prose ul,
+.prose ol {
+  padding-left: 19px;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.prose ul p,
+.prose ol p {
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+.prose ul ul,
+.prose ol ul,
+.prose ul ol,
+.prose ol ol {
+  margin-bottom: 0;
+}
+summary {
+  user-select: none;
+  cursor: pointer;
+}
