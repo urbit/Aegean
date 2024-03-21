@@ -1,0 +1,9 @@
+:~
+  title+'dns-stun'
+  info+'redirect to your login screen'
+  color+0x4e.70a1
+  version+[0 0 0]
+  website+'https://chorus.one'
+  license+'MIT'
+  site+/dns-stun
+==
