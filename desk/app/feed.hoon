@@ -1,6 +1,8 @@
 /-  *feed, pals, foes
 /+  dbug, default-agent, *feed-json, *feed-ref, schooner, server
 /*  ui  %html  /app/feed/html
+/*  style-css  %css  /web/style/css
+/*  htmx-js  %js  /web/htmx/js
 ::
 |%
 ::
@@ -49,29 +51,34 @@
   [cards this]
 ::
 ++  on-poke
+  ::
   |=  =cage
   ^-  (quip card _this)
   =^  cards  state  abet:(poke:hc cage)
   [cards this]
 ::
 ++  on-peek
+  ::
   |=  =path
   ^-  (unit (unit cage))
   [~ ~]
 ::
 ++  on-agent
+  ::
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
   =^  cards  state  abet:(agent:hc [wire sign])
   [cards this]
 ::
 ++  on-arvo
+  ::
   |=  [=wire =sign-arvo]
   ^-  (quip card _this)
   =^  cards  state  abet:(arvo:hc [wire sign-arvo])
   [cards this]
 ::
 ++  on-watch
+  ::
   |=  =path
   ^-  (quip card _this)
   [~ this]
@@ -226,7 +233,113 @@
     `(map @p @da)`(malt (limo [src.bowl now.bowl]~))
   (~(put by (need n)) src.bowl now.bowl)
 ::
+++  theme-dark
+  ::
+  %-  trip
+  '''
+  :root {
+    --b0: #222;
+    --b1: #333;
+    --b2: #444;
+    --b3: #555;
+    --be: #752;
+    --b-success: #351;
+    --f1: #ccc;
+    --f2: #999;
+    --f3: #777;
+    --f4: #555;
+    --f-error: orange;
+    --f-success: lightgreen;
+    --link: lightblue;
+    --hover:  115%;
+  }
+  '''
+  ::
+++  theme-light
+  ::
+  %-  trip
+  '''
+  :root {
+    --f1: #333;
+    --f2: #555;
+    --f3: #777;
+    --f4: #999;
+    --f-error: #953;
+    --f-success: #351;
+    --b0: #eee;
+    --b1: #ccc;
+    --b2: #bbb;
+    --b3: #888;
+    --b-error: #ca8;
+    --b-success: #8c8;
+    --link: blue;
+    --hover: 87%;
+  }
+  '''
+  ::
+++  theme-system
+  ::
+  """
+  {theme-light}
+  @media (prefers-color-scheme: dark) \{
+  {theme-dark}
+  }
+  """
+  ::
+++  html-template
+  ::
+  |=  [title=tape body=manx]
+  ^-  manx
+  ;html
+    ;head
+      ;meta(charset "UTF-8");
+      ;title: {title}
+      ;meta
+        =name  "viewport"
+        =content
+          """
+          width=device-width,
+          initial-scale=1.0,
+          maximum-scale=1.0"
+          """
+        ;
+      ==
+      ;style: {(trip style-css)}
+      ;style: {theme-system}
+      ;script: {(trip htmx-js)}
+    ==
+    ;body.p3
+      =style  "max-width: 700px; margin: 200px auto;"
+      ;div
+        =hx-swap  "outerHTML"
+        ;+  body
+      ==
+    ==
+  ==
+  ::
+::
+++  form-new-post
+  ::
+  ;form.fc.g2
+    =hx-post  "/apps/feed/submit"
+    ;textarea
+      =class  "p3 br1 border wf"
+      =rows  "5"
+      =name  "text"
+      =autocomplete  "off"
+      =type  "text"
+      =placeholder  "What's up?"
+      =required  ""
+      ;
+    ==
+    ;button.p2.border.b2.hover.loader
+      ;span.loaded: Submit
+      ;span.loading: ...
+    ==
+  ==
+  ::
 ++  handle-http
+  ::
   |=  [eyre-id=@ta =inbound-request:eyre]
   ^+  that
   ?>  =(our.bowl src.bowl)
@@ -247,6 +360,40 @@
       =/  act  (dejs-interaction +.json)
       =.  that  (handle-interaction act)
       (emil (flop (send [200 ~ [%none ~]])))
+    ::
+        [%apps %feed %submit ~]
+      =/  body
+        ::
+        %-  malt
+        %+  fall
+          %+  rush
+            q:(fall body.request.inbound-request [p=0 q=''])
+          yquy:de-purl:html
+        ~
+      =/  entry
+        :*
+          `(~(got by body) 'text')
+          ~
+          ~
+          ~
+        ==
+      =/  r
+        :*  our.bowl
+            now.bowl
+            dap.bowl
+            %entry
+        ==
+      =/  p  (ref-to-path r)
+      =.  that  (emit [%pass /growth %grow p [%entry entry]])
+      =.  store  (~(put by store) r `entry)
+      =.  that  (broadcast [r 1])
+      %-  emil
+      %-  flop
+      %-  send
+      :+  200  ['HX-Refresh' 'true']~
+      :-  %manx
+      form-new-post
+    ::
     ==
     ::
       %'GET'
@@ -256,7 +403,22 @@
     ?+    site  [404 ~ [%plain "404 - Not Found"]]
     ::
         [%apps %feed ~]
-      [200 ~ [%html ui]]
+      :+  200  ~
+      :-  %manx
+      %+  html-template  "feed"
+      ;main.fc.g5
+        ;+  form-new-post
+        ;div.fc.g4
+          ;*  %:  turn  ~(tap by store)
+            |=  [=ref e=(unit entry)]
+            ;div.p3.br1.border
+              ;+  ?~  e  ;/("empty")
+              =/  entry  (need e)
+              ;div: {(trip (fall text.entry 'n/a'))}
+            ==
+          ==
+        ==
+      ==
     ::
         [%apps %feed %json ~]
       [200 ~ [%json (enjs-store [store hidden])]]
@@ -264,6 +426,7 @@
   ==  
 ::
 ++  arvo
+  ::
   |=  [=wire =sign-arvo]
   ^+  that
   ?+    wire  that
@@ -315,6 +478,7 @@
   ==
 ::
 ++  agent
+  ::
   |=  [=wire =sign:agent:gall]
   ^+  that
   ?+    wire  that
@@ -377,6 +541,7 @@
   ==
 ::
 ++  load
+  ::
   |=  =vase
   ^+  that
   ?>  ?=([%0 *] q.vase)
