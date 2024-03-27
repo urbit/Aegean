@@ -293,6 +293,7 @@
       =/  =ref  (path-to-ref path)
       =/  c=(cask)  (need q.dat.roar)
       =/  =entry  ;;(entry +.c)
+      ?>  =(entry (~(got by store) ref))
       =/  =proof  [%disavow ref syg.roar entry]
       ~&  >  'made proof'
       ::
