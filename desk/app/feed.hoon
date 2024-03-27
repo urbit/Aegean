@@ -311,7 +311,6 @@
     ;body.p3
       =style  "max-width: 700px; margin: 200px auto;"
       ;div
-        =hx-swap  "outerHTML"
         ;+  body
       ==
     ==
@@ -322,6 +321,8 @@
   ::
   ;form.fc.g2
     =hx-post  "/apps/feed/submit"
+    =hx-target  "#posts"
+    =hx-swap  "afterbegin"
     ;textarea
       =class  "p3 br1 border wf"
       =rows  "5"
@@ -390,9 +391,9 @@
       %-  emil
       %-  flop
       %-  send
-      :+  200  ['HX-Refresh' 'true']~
+      :+  200  ~
       :-  %manx
-      form-new-post
+      (part-entry [r `entry])
     ::
     ==
     ::
@@ -409,14 +410,10 @@
       ;main.fc.g5
         ;+  form-new-post
         ;div.fc.g4
-          ;*  %:  turn  ~(tap by store)
-            |=  [=ref e=(unit entry)]
-            ;div.p3.br1.border
-              ;+  ?~  e  ;/("empty")
-              =/  entry  (need e)
-              ;div: {(trip (fall text.entry 'n/a'))}
-            ==
-          ==
+          =id  "posts"
+          ;*  %+  turn  
+                ~(tap by store)
+              part-entry
         ==
       ==
     ::
@@ -474,6 +471,31 @@
       =/  evidence  [sig proof]
       =.  locker  (~(put by locker) evidence now.bowl)
       (tell-leeches [%tattle evidence])
+    ==
+  ==
+::
+++  part-entry
+  |=  [=ref e=(unit entry)]
+  ^-  manx
+  =/  entry  (need e)
+  ;div.p3.br1.border.fc.g2
+    ;+  ?~  e  ;/("")
+    ;p: {(trip (fall text.entry 'n/a'))}
+    ::
+    ;+  ?~  link.entry  ;/("")
+    =/  link  (need link.entry)
+    ?+    -.link  ;/("")
+        %media
+      ?-    -.media.link
+          %scry  ;/("")
+          ::
+          %url
+        ;img 
+          =class  "wf"
+          =src  (trip url.media.link)
+          ;
+        ==
+      ==
     ==
   ==
 ::
