@@ -1,5 +1,5 @@
 /-  *feed, pals, foes
-/+  dbug, default-agent, *feed-json, *feed-ref, schooner, server
+/+  dbug, default-agent, *feed-ref, schooner, server
 /*  ui  %html  /app/feed/html
 /*  style-css  %css  /web/style/css
 /*  htmx-js  %js  /web/htmx/js
@@ -356,11 +356,11 @@
     ?+    site
         (emil (flop (send [404 ~ [%plain "404 - Not Found"]])))
     ::
-        [%apps %feed ~]
-      =/  json  (de:json:html q.u.body.request.inbound-request)
-      =/  act  (dejs-interaction +.json)
-      =.  that  (handle-interaction act)
-      (emil (flop (send [200 ~ [%none ~]])))
+    ::    [%apps %feed ~]
+    ::  =/  json  (de:json:html q.u.body.request.inbound-request)
+    ::  =/  act  (dejs-interaction +.json)
+    ::  =.  that  (handle-interaction act)
+    ::  (emil (flop (send [200 ~ [%none ~]])))
     ::
         [%apps %feed %submit ~]
       =/  body
@@ -372,11 +372,11 @@
           yquy:de-purl:html
         ~
       =/  entry
-        :*
-          `(~(got by body) 'text')
-          ~
-          ~
-          ~
+        :*  %microblog
+            `(~(got by body) 'text')
+            ~
+            ~
+            ~
         ==
       =/  r
         :*  our.bowl
@@ -417,8 +417,8 @@
         ==
       ==
     ::
-        [%apps %feed %json ~]
-      [200 ~ [%json (enjs-store [store hidden])]]
+    ::    [%apps %feed %json ~]
+    ::  [200 ~ [%json (enjs-store [store hidden])]]
     ==  
   ==  
 ::
@@ -478,22 +478,33 @@
   |=  [=ref e=(unit entry)]
   ^-  manx
   =/  entry  (need e)
-  ;div.p3.br1.border.fc.g2
-    ;+  ?~  e  ;/("")
-    ;p: {(trip (fall text.entry 'n/a'))}
-    ::
-    ;+  ?~  link.entry  ;/("")
-    =/  link  (need link.entry)
-    ?+    -.link  ;/("")
-        %media
-      ?-    -.media.link
-          %scry  ;/("")
-          ::
-          %url
-        ;img 
-          =class  "wf"
-          =src  (trip url.media.link)
-          ;
+  ?-    -.entry 
+      %flexnote
+    =/  f  flexnote.entry
+    ;div.p3.br1.border.fc.g2
+      =style  (weld "background-color:" (trip (fall background-color.f '#aabbcc')))
+      ;p.s4.p1: {(trip event.f)}
+      ;p.p1: {(trip (fall author.f ''))}
+    ==
+  ::
+      %microblog
+    =/  m  microblog.entry
+    ;div.p3.br1.border.fc.g2
+      ;p: {(trip (fall text.m 'n/a'))}
+      ::
+      ;+  ?~  link.m  ;/("")
+      =/  link  (need link.m)
+      ?+    -.link  ;/("")
+          %media
+        ?-    -.media.link
+            %scry  ;/("")
+            ::
+            %url
+          ;img 
+            =class  "wf"
+            =src  (trip url.media.link)
+            ;
+          ==
         ==
       ==
     ==
