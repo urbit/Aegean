@@ -12,7 +12,12 @@
 +$  saved  (set ref)
 +$  hidden  (set ref)
 ::
-+$  entry                    ::  /mar/entry/hoon
++$  entry  
+  $%  [%microblog =microblog]
+      [%flexnote =flexnote]
+  ==
+::
++$  microblog                    ::  /mar/entry/hoon
   $:  text=(unit cord)       ::  max length 256 bytes
       link=(unit rich)
       quote=(unit ref)
@@ -23,9 +28,21 @@
       [%media =media]
   ==
 +$  preview  (map path cord) ::  OGP data
++$  url  @t
 +$  media
-  $%  [%url url=@t]        ::  url with supported mime type
+  $%  [%url =url]        ::  url with supported mime type
       [%scry =path]        ::  FQSP with supported datatype mark
+  ==
+::
++$  flexnote
+  $:  event=@t
+      icon=(unit url)
+      author=(unit @t)
+      title=(unit @t)
+      description=(unit @t)
+      click=(unit url)
+      background-color=(unit @t)
+      text-color=(unit @t)
   ==
 ::
 +$  boosts  (map ref (map ship @da))  ::  ships who have boosted and when
