@@ -321,8 +321,8 @@
   ::
   ;form.fc.g2
     =hx-post  "/apps/feed/submit"
-    =hx-target  "#posts"
-    =hx-swap  "afterbegin"
+    =hx-target  "main"
+    =hx-swap  "outerHTML"
     ;textarea
       =class  "p3 br1 border wf"
       =rows  "5"
@@ -331,6 +331,15 @@
       =type  "text"
       =placeholder  "What's up?"
       =required  ""
+      ;
+    ==
+    ;textarea
+      =class  "p3 br1 border wf"
+      =rows  "1"
+      =name  "link"
+      =autocomplete  "off"
+      =type  "text"
+      =placeholder  "url"
       ;
     ==
     ;button.p2.border.b2.hover.loader
@@ -374,7 +383,11 @@
       =/  entry
         :*  %microblog
             `(~(got by body) 'text')
-            ~
+            ::
+            =/  l  (~(get by body) 'link')
+            ?~  l  ~
+            `[%media %url (need l)]
+            ::
             ~
             ~
         ==
@@ -393,7 +406,10 @@
       %-  send
       :+  200  ~
       :-  %manx
-      (part-entry [r `entry])
+      ;main.fc.g5
+        ;+  form-new-post
+        ;+  part-feed-list
+      ==
     ::
     ==
     ::
@@ -409,18 +425,30 @@
       %+  html-template  "feed"
       ;main.fc.g5
         ;+  form-new-post
-        ;div.fc.g4
-          =id  "posts"
-          ;*  %+  turn  
-                ~(tap by store)
-              part-entry
-        ==
+        ;+  part-feed-list
       ==
     ::
     ::    [%apps %feed %json ~]
     ::  [200 ~ [%json (enjs-store [store hidden])]]
     ==  
+  ==
+::
+++  part-feed-list
+  ;div.fc.g4
+    =id  "posts"
+    ;*  %+  turn
+          %-  sort-posts
+          ~(tap by store)
+        part-entry
   ==  
+::
+++  sort-posts
+  |=  posts=(list [ref (unit entry)])
+  ^-  (list [ref (unit entry)])
+  %+  sort
+    posts
+  |=  [a=[=ref (unit entry)] b=[=ref (unit entry)]]
+  (gth time.ref.a time.ref.b)
 ::
 ++  arvo
   ::
@@ -478,6 +506,18 @@
   |=  [=ref e=(unit entry)]
   ^-  manx
   =/  entry  (need e)
+  =/  t  (yore time.ref)
+  ::  [[a=%.y y=2.014] m=6 t=[d=6 h=21 m=9 s=15 f=~[0xa16]]]
+  =/  tim  
+    ;:  weld
+      (scow %ud m.t)
+      "/"
+      (scow %ud d.t.t)
+      " "
+      (scow %ud h.t.t)
+      ":" 
+      (y-co:co m.t.t)
+    ==
   ?-    -.entry 
       %flexnote
     =/  f  flexnote.entry
@@ -491,6 +531,10 @@
     =/  m  microblog.entry
     ;div.p3.br1.border.fc.g2
       ;p: {(trip (fall text.m 'n/a'))}
+      ;div.fr.jb.f3
+        ;p: {(scow %p author.ref)}
+        ;p: {tim}
+      ==
       ::
       ;+  ?~  link.m  ;/("")
       =/  link  (need link.m)
@@ -500,8 +544,8 @@
             %scry  ;/("")
             ::
             %url
-          ;img 
-            =class  "wf"
+          ;img.block.ma
+            =style  "max-height: 300px; width: fit-content;"
             =src  (trip url.media.link)
             ;
           ==

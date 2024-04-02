@@ -31,7 +31,7 @@
 +$  url  @t
 +$  media
   $%  [%url =url]        ::  url with supported mime type
-      [%scry =path]        ::  FQSP with supported datatype mark
+      [%scry =path]       ::  FQSP with supported datatype mark
   ==
 ::
 +$  flexnote
