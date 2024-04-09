@@ -1,10 +1,10 @@
+/@  diff=circle-diff
 ::  imp/square implements the %circle-diff poke,
 ::  meaning that it's a valid kid of imp/circles:
 ::  [~[|/%tas] %sig %circle-diff]
 ::  imp/square ignores the provided made and instead
 ::  adds the provided ship as a pal
 ::
-/@  diff=circle-diff
 |%
 ++  state  %sig
 ++  poke   (sy %circle-diff ~)
