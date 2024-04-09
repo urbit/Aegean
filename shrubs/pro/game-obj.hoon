@@ -1,0 +1,1 @@
+,[type=@tas x=@ud y=@ud sprite=@t]

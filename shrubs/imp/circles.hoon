@@ -25,14 +25,6 @@
       %+  turn  ~(tap in p.diff)
       |=  =term
       [(snoc here.bowl term) %tomb ~]
-    ::
-        %add-grandchild
-      :~  :*  (snoc here.bowl circ.diff) 
-              %poke 
-              %circle-diff
-              [%add !>((malt [[p.diff [%hello `!>(~) ~]] ~]))]
-          ==
-      ==
     ==
   ++  init
     |=  vas=(unit vase)
