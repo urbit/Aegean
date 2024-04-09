@@ -64,6 +64,10 @@ class extends HTMLElement {
           this.dispatchEvent(event);
           //
           let segments = here.split("/");
+          if (segments.slice(-1)[0] === "") {
+            // trim on / path
+            segments = segments.slice(0, -1);
+          }
           segments.forEach((s, i) => {
             let btn = this.gid('button-template').content.cloneNode(true);
             btn = btn.querySelector('button');

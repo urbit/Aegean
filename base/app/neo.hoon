@@ -574,7 +574,7 @@
         |=  [=pith *]
         ;button.p2.br1.b1.hover.wf
           =style  "max-width: 650px;"
-          =hx-get  (en-tape:pith:neo (weld /neo/hawk pith))
+          =hx-get  (en-tape:pith:neo :(weld /neo/hawk here pith))
           =hx-target  "closest ha-wk"
           =hx-swap  "innerHTML"
           ; {(en-tape:pith:neo pith)}
@@ -828,25 +828,7 @@
     ?>  &(?=([@ @ *] site.line) =('neo' i.site.line))
     ?.  =('scry' i.t.site.line)
       ?:  =('sky' i.t.site.line)
-        =/  purl  ::  parsed url with query params
-          ::
-          ^-  [pax=path pam=(map @t @t)]
-          =+  %+  rash  url.request.req
-              ;~  plug
-                  ;~(pfix fas (more fas smeg:de-purl:html))
-                  yque:de-purl:html
-              ==
-          [->+.- (molt +.-)]
-          ::
-        =/  body  :: body parsed to a manx
-          ::
-          %+  fall
-            (de-xml:html q:(fall body.request.req [p=0 q='']))
-          *manx
-          ::
-        ::
-        =/  here=path  (welp /[(scot %p our.bowl)] pax.purl)
-        =*  dov  ~(. dove (pave:neo pax.purl))
+        =*  dov  ~(. dove (pave:neo /))
         %-  send
         %-  manx-response:gen:serv
         %-  lift:dov
@@ -879,7 +861,9 @@
           ::
           =/  stud  (@tas (~(got by pam.purl) 'stud'))
           =/  conv  !<($-([@ manx] vase) (all-grab %node))
-          =/  =pail:neo  [stud (conv [stud body])]
+          ?@  vert=(mole |.((conv [stud body])))
+            (send (manx-response:gen:serv ;/("failed to convert")))
+          =/  =pail:neo  [stud u.vert]
           =.  run
             %-  poke-move
             :-  #/[p/our.bowl]/$/eyre/req/[eyre-id]
@@ -924,13 +908,6 @@
           =*  dov  ~(. dove (pave:neo pax.purl))
           %-  send
           %-  manx-response:gen:serv
-          ?:  (~(has by pam.purl) 'ui')
-            %-  lift:dov
-            ;s-k-y.wf.b1(style "min-height:100vh;")
-              ;ha-wk(slot "s0")
-                ;+  curr:dov
-              ==
-            ==
           curr:dov
         ::
     =/  =path  t.t.site.line

@@ -17,13 +17,15 @@ class extends HTMLElement {
           flex-flow: row nowrap;
           width: 100%;
           height: 100%;
+          padding: 4px;
+          gap: 4px;
         }
         section {
         }
       </style>
-      <nav id="nav" class="fc g2 p2 f2" ondrop="console.log('droppy')">
+      <nav id="nav" class="fc g2 p1 f2" ondrop="console.log('droppy')">
         <button
-          class="p2 b2 br2 hover mono wfc"
+          class="p2 bold b2 br2 hover mono wfc"
           onclick="this.getRootNode().host.toggleAttribute('open')"
           >
           ≡
@@ -52,7 +54,7 @@ class extends HTMLElement {
           </div>
         </div>
       </nav>
-      <div id="cs0" class="fr wf hf g2 p1">
+      <div id="cs0" class="fr wf hf g2">
         <section
           id="ws0"
           class="fc grow hidden wf hf br1"
