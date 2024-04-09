@@ -1,4 +1,6 @@
 .bin
 .urb
 .run
+.http.ports
+.vere.lock
 .DS_Store
