@@ -96,6 +96,12 @@ class extends HTMLElement {
     this.addEventListener("here-change", (e) => {
       this.updateTabs();
     })
+    this.addEventListener("inspect-hawk", (e) => {
+      let stud = e.detail.stud
+      if (stud) {
+        this.newTab(`/neo/hawk/src/std/imp/${stud}`);
+      }
+    })
   }
   attributeChangedCallback(name, oldValue, newValue) {
     //
@@ -143,7 +149,7 @@ class extends HTMLElement {
       s.style.height = '100%';
       s.style.overflowY = 'scroll'
       s.style.borderRadius = '4px';
-      s.style.backgroundColor = 'white';
+      s.style.backgroundColor = 'var(--b0)';
       c.style.flexGrow = '1';
       c.style.width = '100%';
       c.style.height = '100%';
@@ -207,16 +213,17 @@ class extends HTMLElement {
       tabs.appendChild(tab);
     })
   }
-  newTab() {
+  newTab(here) {
     //
     let hawk = document.createElement("ha-wk");
     let stub = document.createElement("div");
-    stub.setAttribute("hx-get", "/neo/hawk");
+    stub.setAttribute("hx-get", here || "/neo/hawk");
     stub.setAttribute("hx-swap", "outerHTML");
     stub.setAttribute("hx-trigger", "load");
     hawk.appendChild(stub);
     hawk.setAttribute("slot", "s-");
     hawk.setAttribute("here", "/");
+    hawk.setAttribute("stud", "txt");
     hawk.setAttribute("label", "Home");
     this.insertAdjacentElement("afterbegin", hawk);
     this.trueSlots();

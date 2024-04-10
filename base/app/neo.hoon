@@ -586,20 +586,32 @@
     |=  =room:neo
     ^-  manx
     =+  !<(grow=$-(pail:neo $-(=bowl:neo manx)) (all-grow %htmx))
-    =/  kids
-      %-  ~(run by (kid:of-top here))
-      |=  =room:neo
-      state.icon.room
+    =/  stud  ^-  @tas  ?^(state.room mark.state.room state.room)
+    =-  -(a.g [[%here (en-tape:pith:neo here)] [%stud (trip stud)] a.g.-])
+    ^-  manx
     ?^  man=(mole |.((grow [state.room state.icon.room])))
       %-  u.man
       =+  b=*bowl.neo  :: manually constructing a bowl. this is ugly
       %=  b
         here  here
-        kids  kids
+        kids
+          %-  ~(run by (kid:of-top here))
+          |=  =room:neo
+          state.icon.room
       ==
-    ;code
-      {":: unable to render state as htmx"}
-      {(text state.icon.room)}
+    ;div.p3.fc.g3
+      ;div.f-error.fc.g2
+        ;span: unable to render as %htmx
+        ;span.bold
+          ;+  ;/
+          ?^  state.room
+            (trip mark.state.room)
+          (trip state.room)
+        ==
+      ==
+      ;code
+        {(text state.icon.room)}
+      ==
     ==
     ::
   ++  html-enc-js
@@ -623,71 +635,12 @@
     });
     '''
     ::
-  ++  theme-dark
-    ::
-    %-  trip
-    '''
-    :root {
-      --b0: #222;
-      --b1: #333;
-      --b2: #444;
-      --b3: #555;
-      --be: #752;
-      --b-success: #351;
-      --f1: #ccc;
-      --f2: #999;
-      --f3: #777;
-      --f4: #555;
-      --f-error: orange;
-      --f-success: lightgreen;
-      --link: lightblue;
-      --hover:  115%;
-    }
-    '''
-    ::
-  ++  theme-light
-    ::
-    %-  trip
-    '''
-    :root {
-      --f1: #333;
-      --f2: #555;
-      --f3: #777;
-      --f4: #999;
-      --f-error: #953;
-      --f-success: #351;
-      --b0: #eee;
-      --b1: #ccc;
-      --b2: #bbb;
-      --b3: #888;
-      --b-error: #ca8;
-      --b-success: #8c8;
-      --link: blue;
-      --hover: 87%;
-    }
-    '''
-    ::
-  ++  theme-system
-    ::
-    """
-    {theme-light}
-    @media (prefers-color-scheme: dark) \{
-    {theme-dark}
-    }
-    """
-    ::
   ++  lift
     ::
     |=  in=manx
     ::
     ::  this theme value should be read from the user's shrubs at /sky/theme or something
     ::
-    =/  theme  'light'
-    =/  colors
-      ?:  =(theme 'light')  theme-light
-      ?:  =(theme 'dark')  theme-dark
-      theme-system
-      ::
     ^-  manx
     ;html
       ;head
@@ -708,7 +661,6 @@
         ;script: {(trip multiline-input)}
         ;script: {(trip ha-wk)}
         ;script: {(trip s-k-y)}
-        ;style: {colors}
       ==
       ;body(hx-ext "html-enc", hx-swap "outerHTML")
         ;+  in
@@ -827,36 +779,73 @@
     =/  line=request-line:serv  (parse-request-line:serv url.request.req)
     ?>  &(?=([@ @ *] site.line) =('neo' i.site.line))
     ?.  =('scry' i.t.site.line)
+      =/  purl  ::  parsed url with query params
+        ::
+        ^-  [pax=path pam=(map @t @t)]
+        =+  %+  rash  url.request.req
+            ;~  plug
+                ;~(pfix fas (more fas smeg:de-purl:html))
+                yque:de-purl:html
+            ==
+        [->+.- (molt +.-)]
+        ::
+      =/  body  :: body parsed to a manx
+        ::
+        %+  fall
+          (de-xml:html q:(fall body.request.req [p=0 q='']))
+        *manx
+        ::
+      =/  here=path  (welp /[(scot %p our.bowl)] pax.purl)
+      =/  =pith  (pave:neo pax.purl)
+      =*  dov  ~(. dove pith)
+      ::
       ?:  =('sky' i.t.site.line)
-        =*  dov  ~(. dove (pave:neo /))
+        ::
+        =/  here  (pave:neo /sky)
+        ?~  rum=(get:of-top here)
+          ::
+          ::  create default tree
+          =/  bootstrap
+            ^-  (list card:neo)
+            :~
+              [(weld #/[p/our.bowl] here) %make %sky `!>(%system) ~]
+              [#/[p/our.bowl]/diary %make %diary `!>('') ~]
+              [#/[p/our.bowl]/iframes/wikipedia %make %iframe `!>('https://en.wikiepdia.org') ~]
+            ==
+            |-
+            ?~  bootstrap
+              %-  send
+              %-  manx-response:gen:serv
+              %-  ~(lift dove pax.purl)
+              ;div.wf.hf.fc.jc.ac
+                =hx-get  "/neo/sky"
+                =hx-swap  "outerHTML"
+                =hx-trigger  "load"
+                ; initializing
+              ==
+            =.  run
+              %-  poke-move
+              :-  #/[p/our.bowl]/$/eyre/req/[eyre-id]
+              i.bootstrap
+            $(bootstrap t.bootstrap)
+            ::
         %-  send
         %-  manx-response:gen:serv
-        %-  lift:dov
-        ;s-k-y.wf.b1(style "min-height:100vh;")
-          ;ha-wk(slot "s0")
-            ;+  curr:dov
-          ==
+        %-  ~(lift dove pax.purl)
+        =+  !<(grow=$-(pail:neo $-(=bowl:neo manx)) (all-grow %htmx))
+        ?~  man=(mole |.((grow [%sky state.icon.u.rum])))
+          !!
+        %-  u.man
+        =+  b=*bowl.neo
+        %=  b
+          here  here
+          kids
+            %-  ~(run by (kid:of-top here))
+            |=  =room:neo
+            state.icon.room
         ==
       ?>  =('hawk' i.t.site.line)
         ::
-        =/  purl  ::  parsed url with query params
-          ::
-          ^-  [pax=path pam=(map @t @t)]
-          =+  %+  rash  url.request.req
-              ;~  plug
-                  ;~(pfix fas (more fas smeg:de-purl:html))
-                  yque:de-purl:html
-              ==
-          [->+.- (molt +.-)]
-          ::
-        =/  body  :: body parsed to a manx
-          ::
-          %+  fall
-            (de-xml:html q:(fall body.request.req [p=0 q='']))
-          *manx
-          ::
-        ::
-        =/  here=path  (welp /[(scot %p our.bowl)] pax.purl)
         ?:  =(%'POST' method.request.req)  ::  %poke
           ::
           =/  stud  (@tas (~(got by pam.purl) 'stud'))
@@ -882,22 +871,7 @@
           ::
         ?:  =(%'PUT' method.request.req)    ::  %make
           ::
-          =/  text  (~(got by pam.purl) 'text')
-          =/  p
-            ?:  =(0 (lent pax.purl))  /
-            pax.purl
-          =/  here  (welp /~bus (path p))
-          =/  =move:neo
-            :-  #/[p/our.bowl]/$/eyre/req/[eyre-id]
-            [(pave:neo here) %make %txt `!>(text) ~]
-          =.  run  (poke-move move)
-          %-  send
-          =+  r=(manx-response:gen:serv ;/(""))
-          %=  r
-            headers.response-header
-              :-  ['HX-Location' (spat :(welp /neo/hawk p))]
-              headers.response-header.r
-          ==
+          !!
           ::
         ?:  =(%'DELETE' method.request.req) ::  %tomb
           ::
@@ -905,7 +879,6 @@
           ::
         ::    %'GET'  :: "read"
           ::
-          =*  dov  ~(. dove (pave:neo pax.purl))
           %-  send
           %-  manx-response:gen:serv
           curr:dov
@@ -945,7 +918,7 @@
   ^-  ?
   ?.  ?=([@ *] pith)
     |
-  |(=('out' i.pith) =('pre' i.pith) =('src' i.pith))
+  |(=('out' i.pith) =('pre' i.pith) =('src' i.pith) =('sky' i.pith))
   ::
 ::
 ::

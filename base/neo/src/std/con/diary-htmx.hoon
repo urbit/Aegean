@@ -49,7 +49,6 @@
   ::
   ;div.p2
     =label  "Diary"
-    =here  (en-tape:pith:neo here.bowl)
     ;div.ma.fc.g2
       =style  "max-width: 650px;"
       ;+  form-put-entry
