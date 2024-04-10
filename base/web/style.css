@@ -6,28 +6,35 @@
   *    utility classes
   *
   **/
+
 :root {
   --x: 4px;
 }
 * {
   box-sizing: border-box;
+  font: inherit;
+  color: inherit;
 }
 form, p, li, ul, ol, div, button {
   margin: 0;
 }
 html {
   height: 100%;
-  font-size: 16px;
+  font-size: 21px;
 }
 body {
   margin: 0;
-  font-family: Verdana, Tahoma, sans-serif;
+  font-family: 'Urbit Sans';
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  letter-spacing: 0.024em;
   line-height: 1;
   background-color: var(--b0);
   color: var(--f1);
   min-height: 100%;
 }
 a {
+  cursor: pointer;
   text-decoration: none;
 }
 button, input, textarea, iframe {
@@ -86,7 +93,8 @@ button, input, textarea, iframe {
   height: fit-content;
 }
 .mono {
-  font-family: Inconsolata, Courier New, Monaco, Consolas, monospace;
+  font-variation-settings: "xtab" 500;
+  font-size: 0.8em;
 }
 .bold {
   font-weight: bold;
@@ -350,7 +358,7 @@ button {
 }
 .prose p {
   margin-bottom: 1rem;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 .prose img {
   max-width: 100%;
@@ -359,6 +367,9 @@ button {
 }
 .prose details {
   margin-bottom: 1rem;
+}
+.prose mono {
+  font-size: 1em;
 }
 .prose code {
   white-space: pre;

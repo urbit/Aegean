@@ -34,7 +34,7 @@ class extends HTMLElement {
       </style>
       <template id="button-template">
         <button
-          class="b3 hover p1 br1"
+          class="b3 hover p1 br1 mono"
           hx-target="closest ha-wk"
           hx-swap="innerHTML"
           slot="crumbs"
@@ -48,7 +48,7 @@ class extends HTMLElement {
         <div id="actions">
           <button
                  onclick="this.getRootNode().host.inspect()"
-                 class="b3 hover p1 br1"
+                 class="b3 hover p1 br1 mono"
             id="stud"
             ></button>
         </div>

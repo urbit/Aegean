@@ -614,6 +614,38 @@
       ==
     ==
     ::
+  ++  svg-wrapper
+    ::
+    |=  [color=tape viewbox=tape body=manx]
+    ^-  manx
+    ;svg
+      =xmlns  "http://www.w3.org/2000/svg"
+      =viewBox  viewbox
+      =fill  color
+      =style  "height: 1em;"
+      ;+  body
+    ==
+    ::
+  ++  svg-square
+    ::
+    |=  color=(unit tape)
+    %^  svg-wrapper  (fall color "currentColor")
+      "0 0 448 512"
+    ;path(d "M0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96z");
+    ::
+  ++  favicon
+    ::
+    =-
+      ;link
+        =rel  "icon"
+        =type  "image/svg+xml"
+        =href  -
+        ;
+      ==
+    %+  weld  "data:image/svg+xml;utf8,"
+    %-  en-xml:html
+    (svg-square `"white")
+    ::
   ++  html-enc-js
     ::
     ::  htmx extension which encodes the request
@@ -648,6 +680,23 @@
         ;title: %sky
         ;script(src "https://unpkg.com/htmx.org@1.9.11");
         ;script: {html-enc-js}
+        ;style
+          ;+  ;/  %-  trip
+          '''
+          @font-face {
+            font-family: 'Urbit Sans';
+            src: url("https://media.urbit.org/fonts/UrbitSans/UrbitSansVFWeb-Regular.woff2") format("woff2");
+            font-style: normal;
+            font-weight: 100 700;
+          }
+          /*
+          @font-face {
+            font-family: 'Urbit';
+            src: url('https://nyc3.digitaloceanspaces.com/drain/hawk/2024.4.10..21.47.28-urbit.ttf') format('truetype');
+          }
+          */
+          '''
+        ==
         ;script
           ;+  ;/
           """
@@ -661,80 +710,11 @@
         ;script: {(trip multiline-input)}
         ;script: {(trip ha-wk)}
         ;script: {(trip s-k-y)}
+        ;+  favicon
       ==
       ;body(hx-ext "html-enc", hx-swap "outerHTML")
         ;+  in
       ==
-    ==
-  ++  stud-tape
-    ::
-    |=  s=stud:neo
-    ^-  tape
-    ?@  s  (trip s)
-    "{(scow %p ship.s)}/{(trip desk.s)}/{(trip mark.s)}"
-  ++  pith-a
-    ::
-    |=  [=pith:neo in=manx]
-    =/  tap  (en-tape:pith:neo pith)
-    ^-  manx
-    ?.  |(=(~ pith) (has:of-top pith))
-      ;span
-        ;+  in
-      ==
-    ;a.underline/"/neo/hawk{tap}.html"
-      ;+  in
-    ==
-  ++  room-li
-    ::
-    |=  [=pith:neo =room:neo]
-    ^-  manx
-    ;div.flex.flex-col.gap-1.border.border-slate-300.p-2.rounded
-      ;+  (pith-a (welp here pith) ;/((en-tape:pith:neo pith)))
-      ::;details
-        ::;summary: Meta
-        ::;*  (room-meta pith room)
-      ::==
-    ==
-  ++  navbar-item
-    ::
-    |=  [=pith:neo in=manx]
-    ^-  manx
-    ;li.p-2.border
-      ;+  (pith-a pith in)
-    ==
-  ++  home
-    ::
-    ^-  manx
-    ;li.p-2.border
-      ;a.underline/"/neo/hawk": Root
-    ==
-  ++  navbar
-    ::
-    ;nav.w-full.my-2
-      ;ol.flex.align-center.justify-center.w-full.space-x-4
-        ;*  
-        :-  home
-        =<  q
-        ^-  (pair pith:neo (list manx))
-        %+  roll  here
-        |=  [=iota pit=pith:neo out=(list manx)]
-        ^-  (pair pith:neo (list manx))
-        =.  pit  (snoc pit iota)
-        :-  pit
-        %+  snoc  out
-        %+  navbar-item  pit
-        ;/(?@(iota "%{(trip iota)}" (scow iota)))
-      ==
-    ==
-  ++  room-meta
-    ::
-    |=  [=pith:neo =room:neo]
-    ^-  (list manx)
-    :~
-      ;dt: Code
-      ;dd: {(stud-tape code.room)}
-      ;dt: State
-      ;dd: {(stud-tape state.room)}
     ==
   --
 ::
