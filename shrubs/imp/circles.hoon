@@ -30,7 +30,7 @@
       :~  :*  (snoc here.bowl circ.diff) 
               %poke 
               %circle-diff
-              [%add !>((malt [[p.diff [%hello `!>(~) ~]] ~]))]
+              !>([%add (malt [[p.diff [%hello `!>(~) ~]] ~])])
           ==
       ==
     ==
