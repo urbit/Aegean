@@ -1,10 +1,8 @@
+/@  entry
 |%
-++  state  %sig
+++  state  %entry
 ++  poke   ~
-++  kids   
-  %-  ~(gas by *kids:neo)
-  :~  [~[|/%da |/%p] %entry %sig]
-  ==
+++  kids   *kids:neo
 ++  deps   *deps:neo
 ++  form
   ^-  form:neo
@@ -14,6 +12,7 @@
     [~ vax]
   ++  init
     |=  vas=(unit vase)
-    [~ *vase]
+    =/  v  ;;(@t !<(@t (need vas)))
+    [~ !>(v)]
   --
 --
