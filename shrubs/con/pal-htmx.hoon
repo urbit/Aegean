@@ -1,3 +1,5 @@
 :-  [%pal %htmx]
-|=  =bowl:neo
+:: :-  [%txt %htmx]
+:: ^-  bowl:manx
+:: |=  =bowl:neo
 *manx
