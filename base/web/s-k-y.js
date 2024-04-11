@@ -2,7 +2,7 @@ customElements.define('s-k-y',
 class extends HTMLElement {
   static get observedAttributes() {
     //
-    return ["open"];
+    return ["open", "hawks"];
   }
   constructor() {
     //
@@ -23,7 +23,7 @@ class extends HTMLElement {
         section {
         }
       </style>
-      <nav id="nav" class="fc g2 p1 f2" ondrop="console.log('droppy')">
+      <nav id="nav" class="fc g2 p1 f2">
         <button
           class="p2 bold b2 br2 hover mono wfc"
           onclick="this.getRootNode().host.toggleAttribute('open')"
@@ -37,6 +37,20 @@ class extends HTMLElement {
             >
             +
           </button>
+          <div class="fr g2">
+            <button
+              class="p1 br1 b1 grow hover"
+              onclick="this.getRootNode().host.cull()"
+              >
+              -
+            </button>
+            <button
+              class="p1 br1 b1 grow hover"
+              onclick="this.getRootNode().host.grow()"
+              >
+              +
+            </button>
+          </div>
           <div id="tabs" class="fc g1 wf">
             <template id="tab-template">
               <div class="mono fr b1 br1" style="cursor: pointer;">
@@ -96,6 +110,20 @@ class extends HTMLElement {
     this.addEventListener("here-change", (e) => {
       this.updateTabs();
     })
+    this.addEventListener("cull", (e) => {
+      this.cull();
+    });
+    this.addEventListener("true", (e) => {
+      this.trueSlots();
+    });
+    this.addEventListener("grow", (e) => {
+      this.grow();
+    });
+    this.addEventListener("clone-hawk", (e) => {
+      let here = e.detail.here;
+      let slot = e.detail.slot;
+      this.newTab(`/neo/hawk${here}`, slot);
+    })
     this.addEventListener("inspect-hawk", (e) => {
       let stud = e.detail.stud
       if (stud) {
@@ -107,7 +135,12 @@ class extends HTMLElement {
     //
     if (name === "open") {
       this.gid("aside").classList.toggle("hidden");
+    } else if (name === "hawks") {
+      this.trueSlots();
     }
+  }
+  get hawks() {
+    return parseInt(this.getAttribute("hawks") || "0");
   }
   gid(id) {
     //
@@ -120,20 +153,13 @@ class extends HTMLElement {
   trueSlots() {
     //
     let kids = [...this.childNodes];
-    let slotted = kids.filter(k => {
-      return k.hasAttribute("slot");
-    })
-    let sorted = [...slotted];
-    sorted.sort((a, b) => {
-      let sa = a.getAttribute("slot");
-      let sb = b.getAttribute("slot");
-      return sa > sb;
-    })
-    kids.forEach(k => {
-      k.removeAttribute("slot");
-    })
-    sorted.forEach((c, i) => {
-      c.setAttribute("slot", `s${i}`);
+    let hawks = parseInt(this.getAttribute("hawks") || "1");
+    kids.forEach((k, i) => {
+      if (i < hawks) {
+        k.setAttribute("slot", `s${i}`)
+      } else  {
+        k.removeAttribute("slot");
+      }
     })
     this.updateTabs();
   }
@@ -145,8 +171,8 @@ class extends HTMLElement {
     if (s) {
       s.style.flexGrow = '1';
       s.style.display = 'flex';
-      s.style.width = '100%';
-      s.style.height = '100%';
+      s.style.maxWidth = '100%';
+      s.style.maxHeight = '100%';
       s.style.overflowY = 'scroll'
       s.style.borderRadius = '4px';
       s.style.backgroundColor = 'var(--b0)';
@@ -187,33 +213,13 @@ class extends HTMLElement {
       sel.textContent = label || here;
       sel.addEventListener('click', (e) => {
         e.preventDefault();
-        frames.forEach(f => {
-          f.removeAttribute("slot");
-        });
-        f.setAttribute("slot", "s-");
+        this.insertAdjacentElement("afterbegin", f);
         this.trueSlots();
       })
-      add.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (!open) {
-          f.setAttribute("slot", "s-");
-          this.trueSlots();
-          tab.classList.add("active");
-        } else {
-          f.removeAttribute("slot");
-          this.trueSlots();
-          tab.classList.remove("active");
-        }
-      })
-      del.addEventListener('click', (e) => {
-        e.preventDefault();
-        f.remove();
-        this.trueSlots();
-      });
       tabs.appendChild(tab);
     })
   }
-  newTab(here) {
+  newTab(here, slot) {
     //
     let hawk = document.createElement("ha-wk");
     let stub = document.createElement("div");
@@ -221,12 +227,24 @@ class extends HTMLElement {
     stub.setAttribute("hx-swap", "outerHTML");
     stub.setAttribute("hx-trigger", "load");
     hawk.appendChild(stub);
-    hawk.setAttribute("slot", "s-");
-    hawk.setAttribute("here", "/");
+    hawk.setAttribute("here", "");
     hawk.setAttribute("stud", "txt");
     hawk.setAttribute("label", "Home");
-    this.insertAdjacentElement("afterbegin", hawk);
-    this.trueSlots();
+    let s = this.slotted(slot)
+    if (s) {
+      s.insertAdjacentElement("beforebegin", hawk);
+    } else {
+      this.insertAdjacentElement("afterbegin", hawk);
+    }
+    this.grow();
     htmx.process(document.body);
+  }
+  cull() {
+    this.setAttribute("hawks", Math.max(0, this.hawks - 1));
+    this.trueSlots();
+  }
+  grow() {
+    this.setAttribute("hawks", Math.min(4, this.children.length, this.hawks + 1));
+    this.trueSlots();
   }
 });

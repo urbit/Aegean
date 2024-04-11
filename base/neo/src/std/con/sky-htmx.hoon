@@ -68,7 +68,7 @@
     ::
   ;div.wf.b1(style "min-height: 100vh;")
     ;style: {colors}
-    ;s-k-y.wf.hf(open "")
+    ;s-k-y.wf.hf(open "", hawks "0")
       ;*  %:  turn  ~(tap by kids:bowl)
         |=  [=pith =vase]
         ;ha-wk
