@@ -1,3 +1,4 @@
+/+  dprint
 ::  $neo: New Shrub
 ::
 ::    Urbit is a namespace, from a path -> data
@@ -16,6 +17,7 @@
 ::
 ::  
 |%
+++  dprint  dprint
 +$  care
   $?  %x  :: single node
       %y  :: single node and immediate children

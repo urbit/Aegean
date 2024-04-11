@@ -285,6 +285,7 @@
 ++  init
   |^  ^+  run
   =+  .^(neo-vase=vase %ca (welp clay-beak /sur/neo/hoon))
+  ~&  (sloe p.neo-vase)
   =/  reef=vase  (slop !>(..zuse) neo-vase(p [%face %neo p.neo-vase]))
   =/  riff=room:neo
     [%ford-riff %ford-out ~ [1 1] !>(`[cac=(unit vase) ~]`[`!>(ford-riff) ~]) ~ ~]
@@ -589,7 +590,10 @@
     =/  stud  ^-  @tas  ?^(state.room mark.state.room state.room)
     =-  -(a.g [[%here (en-tape:pith:neo here)] [%stud (trip stud)] a.g.-])
     ^-  manx
-    ?^  man=(mole |.((grow [state.room state.icon.room])))
+    =/  res=(each $-(=bowl:neo manx) tang)
+      (mule |.((grow [state.room state.icon.room])))
+    ?:  ?=(%& -.res)  
+      =+  man=[u=p.res ~]
       %-  u.man
       =+  b=*bowl.neo  :: manually constructing a bowl. this is ugly
       %=  b
@@ -609,8 +613,12 @@
           (trip state.room)
         ==
       ==
-      ;code
-        {(text state.icon.room)}
+      ;code.pre.scroll-x.flex.flex-col
+        ;div: {(text state.icon.room)}
+        ;*
+        %+  turn  p.res
+        |=  tan=tank
+        ;div: {~(ram re tan)}
       ==
     ==
     ::
@@ -896,9 +904,10 @@
 ++  is-sys
   |=  =pith:neo
   ^-  ?
-  ?.  ?=([@ *] pith)
-    |
-  |(=('out' i.pith) =('pre' i.pith) =('src' i.pith) =('sky' i.pith))
+  |
+::  ?.  ?=([@ *] pith)
+::    |
+::  |(=('out' i.pith) =('pre' i.pith) =('src' i.pith) =('sky' i.pith))
   ::
 ::
 ::
@@ -1486,14 +1495,15 @@
         %-  (slog leaf/"mark-vale" p.res)
         |
       |.  ^-  ?
-      =/  src=vase  (need ~(get pro grab))
-      =/  dst=vase  (need ~(get pro grow))
-      =/  need=type  
-        =<  p
-        %+  slap  (with-faces:ford:neo get-reef src/src dst/dst ~)
-        !,(*hoon *$-(src dst))
-      =/  have=type  -:(slot 3 vax)
-      (~(nest ut need) & have)
+      &
+      ::  =/  src=vase  (need ~(get pro grab))
+      ::  =/  dst=vase  (need ~(get pro grow))
+      ::=/  need=type  
+      ::  =<  p
+      ::  %+  slap  (with-faces:ford:neo get-reef src/src dst/dst ~)
+      ::  !,(*hoon *$-(src dst))
+      ::=/  have=type  -:(slot 3 vax)
+      ::(~(nest ut need) & have)
     --
   ++  pith
     `pith:neo`(pave:neo path)

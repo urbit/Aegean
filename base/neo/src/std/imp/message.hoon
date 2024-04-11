@@ -1,6 +1,13 @@
 /@  message
 |%
+::  +state: Type of state
+::  
+::    This is a doccord
+::
 ++  state  %message
+::  +poke: Accepted poke handlers
+::
+::    None
 ++  poke   ~
 ++  kids   *kids:neo
 ++  deps   *deps:neo
