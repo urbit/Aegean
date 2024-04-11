@@ -130,6 +130,17 @@ button, input, textarea, iframe {
   flex-direction: row;
   flex-wrap: wrap;
 }
+.basis-full {
+  flex-basis: 100%;
+}
+.basis-half {
+  flex-basis: 50%;
+  flex-shrink: 0;
+}
+.basis-none {
+  flex-basis: 0%;
+  flex-shrink: 1;
+}
 .relative {
   position: relative;
 }

@@ -1,7 +1,7 @@
 customElements.define('ha-wk',
 class extends HTMLElement {
   static get observedAttributes() {
-    return [];
+    return ["stud", "here", "label"];
   }
   constructor() {
     //
@@ -17,6 +17,7 @@ class extends HTMLElement {
         }
         section {
           position: sticky;
+          z-index: 10;
           top: 0;
           left: 0;
           display: flex;
@@ -48,6 +49,13 @@ class extends HTMLElement {
         </button>
       </template>
       <section>
+        <button
+          class="b2 hover p1 br1 mono f2"
+          onclick="this.getRootNode().host.toggleTree(event)"
+          slot="crumbs"
+          >
+          z
+        </button>
         <button
           class="b2 hover p1 br1 mono f2"
           onclick="this.getRootNode().host.toggleMore(event)"
@@ -89,7 +97,7 @@ class extends HTMLElement {
           </button>
           <button
             class="b2 hover p1 br1 mono"
-            onclick="this.getRootNode().host.remove()"
+            onclick="this.getRootNode().host.suicide()"
             slot="crumbs"
             >
             X
@@ -104,6 +112,10 @@ class extends HTMLElement {
               ></button>
           </div>
         </aside>
+        <div id="tree" class="hidden p3 b3 fc g3 br1 basis-full">
+          <h1 class="bold">tree</h1>
+          <p>not yet implemented</p>
+        </div>
       </section>
       <slot id="slot"></slot>
     `;
@@ -116,7 +128,7 @@ class extends HTMLElement {
       this.gid("btns").assignedNodes().forEach(n => n.remove())
       if (nodes.length) {
         let wrapped = nodes[0];
-        this.gid("stud").textContent = `%${wrapped.getAttribute("stud") || ''}`
+        this.setAttribute("stud", wrapped.getAttribute("stud"));
         if (wrapped.hasAttribute("here")) {
           let here = wrapped.getAttribute("here");
           let label = wrapped.getAttribute("label");
@@ -145,13 +157,29 @@ class extends HTMLElement {
           this.removeAttribute("here");
           this.removeAttribute("label");
         }
-        const event = new CustomEvent('here-change', {composed: true});
-        this.dispatchEvent(event);
       }
+      console.log('here-change', this);
+      const event = new CustomEvent('here-change', {composed: true});
+      this.dispatchEvent(event);
     })
   }
   attributeChangedCallback(name, oldValue, newValue) {
     //
+    if (name === "stud") {
+      this.gid("stud").textContent = `%${newValue}`
+    } else if (name === "here") {
+      const event = new CustomEvent('true', {
+        bubbles: true,
+        composed: true,
+      });
+      this.dispatchEvent(event);
+    } else if (name === "label") {
+      const event = new CustomEvent('true', {
+        bubbles: true,
+        composed: true,
+      });
+      this.dispatchEvent(event);
+    }
   }
   gid(id) {
     //
@@ -169,6 +197,10 @@ class extends HTMLElement {
   }
   toggleMore(e) {
     this.gid("aside").classList.toggle("hidden");
+    e.target.classList.toggle("b3");
+  }
+  toggleTree(e) {
+    this.gid("tree").classList.toggle("hidden");
     e.target.classList.toggle("b3");
   }
   clone() {
@@ -213,5 +245,14 @@ class extends HTMLElement {
       composed: true,
     });
     this.dispatchEvent(event);
+  }
+  suicide() {
+    let par = this.parentNode;
+    this.remove();
+    const event = new CustomEvent('true', {
+      bubbles: true,
+      composed: true,
+    });
+    par.dispatchEvent(event);
   }
 })

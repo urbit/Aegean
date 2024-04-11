@@ -17,13 +17,11 @@ class extends HTMLElement {
           flex-flow: row nowrap;
           width: 100%;
           height: 100%;
-          padding: 4px;
-          gap: 4px;
         }
         section {
         }
       </style>
-      <nav id="nav" class="fc g2 p1 f2">
+      <nav id="nav" class="fc p2 f2 g2">
         <button
           class="p2 bold b2 br2 hover mono wfc"
           onclick="this.getRootNode().host.toggleAttribute('open')"
@@ -55,7 +53,7 @@ class extends HTMLElement {
             <template id="tab-template">
               <div class="mono fr b1 br1" style="cursor: pointer;">
                 <button
-                  class="action p2 b1 hover br1"
+                  class="action p2 b1 hover br1 hidden"
                 >+</button>
                 <button
                   class="action p2 b1 hover grow tl br1"
@@ -68,28 +66,14 @@ class extends HTMLElement {
           </div>
         </div>
       </nav>
-      <div id="cs0" class="fr wf hf g2">
-        <section
-          id="ws0"
-          class="fc grow hidden wf hf br1"
-          >
-          <slot id="s0" name="s0"></slot>
-        </section>
-        <div id="cs1" class="fc g2">
-          <section id="ws1" class="fc grow hidden wf hf br1">
-            <slot id="s1" name="s1"></slot>
-          </section>
-          <div id="cs2" class="fr g2">
-            <section id="ws2" class="fc grow hidden wf hf br1">
-              <slot id="s2" name="s2"></slot>
-            </section>
-            <div id="cs3" class="fc g2">
-              <section
-                id="ws3"
-                class="fc grow hidden wf hf br1"
-                >
-                <slot id="s3" name="s3"></slot>
-              </section>
+      <div id="cs0" class="fr wf hf basis-full">
+        <slot id="s0" name="s0"></slot>
+        <div id="cs1" class="fc basis-none">
+          <slot id="s1" name="s1"></slot>
+          <div id="cs2" class="fr basis-none">
+            <slot id="s2" name="s2"></slot>
+            <div id="cs3" class="fc basis-none">
+              <slot id="s3" name="s3"></slot>
             </div>
           </div>
         </div>
@@ -112,23 +96,28 @@ class extends HTMLElement {
     })
     this.addEventListener("cull", (e) => {
       this.cull();
+      this.updateTabs();
     });
     this.addEventListener("true", (e) => {
       this.trueSlots();
+      this.updateTabs();
     });
     this.addEventListener("grow", (e) => {
       this.grow();
+      this.updateTabs();
     });
     this.addEventListener("clone-hawk", (e) => {
       let here = e.detail.here;
       let slot = e.detail.slot;
       this.newTab(`/neo/hawk${here}`, slot);
+      this.updateTabs();
     })
     this.addEventListener("inspect-hawk", (e) => {
       let stud = e.detail.stud
       if (stud) {
         this.newTab(`/neo/hawk/src/std/imp/${stud}`);
       }
+      this.updateTabs();
     })
   }
   attributeChangedCallback(name, oldValue, newValue) {
@@ -137,6 +126,7 @@ class extends HTMLElement {
       this.gid("aside").classList.toggle("hidden");
     } else if (name === "hawks") {
       this.trueSlots();
+      this.updateTabs();
     }
   }
   get hawks() {
@@ -165,27 +155,43 @@ class extends HTMLElement {
   }
   reactSlot(id) {
     //
-    const s = this.slotted(id);
+    let s = this.slotted(id);
     let c = this.gid("c"+id);
-    let w = this.gid("w"+id);
-    if (s) {
-      s.style.flexGrow = '1';
-      s.style.display = 'flex';
+    let slot = parseInt(id.slice(1));
+    if (s && slot < this.hawks) {
+      // display hawk
       s.style.maxWidth = '100%';
       s.style.maxHeight = '100%';
-      s.style.overflowY = 'scroll'
-      s.style.borderRadius = '4px';
-      s.style.backgroundColor = 'var(--b0)';
-      c.style.flexGrow = '1';
-      c.style.width = '100%';
-      c.style.height = '100%';
-      w.classList.remove('hidden');
+      s.classList.add("border");
+      s.classList.add("b0");
+      s.classList.add("scroll-y");
+      s.classList.add("scroll-x");
       //
-    } else if (c) {
-      c.style.flexGrow = '0';
-      c.style.width = '0';
-      c.style.height = '0';
-      w.classList.add('hidden');
+      s.classList.add("grow");
+      c.classList.add("grow");
+      //
+      s.classList.add("basis-half");
+      c.classList.add("basis-half");
+      //
+      s.classList.remove("basis-none");
+      c.classList.remove("basis-none");
+      //
+      s.classList.remove('hidden');
+      c.classList.remove('hidden');
+    } else {
+      // hide hawk
+      if (s) {
+        s.classList.remove("grow");
+        s.classList.add("basis-none");
+        s.classList.remove("basis-half");
+        s.classList.add('hidden');
+        s.classList.add("scroll-y");
+        s.classList.add("scroll-x");
+      }
+      c.classList.remove("grow");
+      c.classList.add("basis-none");
+      c.classList.remove("basis-half");
+      c.classList.add('hidden');
     }
     this.updateTabs();
   }
@@ -216,6 +222,11 @@ class extends HTMLElement {
         this.insertAdjacentElement("afterbegin", f);
         this.trueSlots();
       })
+      del.addEventListener('click', (e) => {
+        e.preventDefault();
+        f.suicide();
+        this.trueSlots();
+      })
       tabs.appendChild(tab);
     })
   }
@@ -238,6 +249,7 @@ class extends HTMLElement {
     }
     this.grow();
     htmx.process(document.body);
+    this.updateTabs();
   }
   cull() {
     this.setAttribute("hawks", Math.max(0, this.hawks - 1));

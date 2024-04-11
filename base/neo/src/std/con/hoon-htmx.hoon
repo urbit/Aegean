@@ -22,28 +22,30 @@
 ::
 ++  apex
   ^-  manx
-  ;div
+  ;div.scroll-x
     ;+  imports
     ;+  contents
   ==
 ++  imports
-  ;div
-    ;div
-      ;h4: Protocols
-      ;*  
-      %+  turn  pro.file
-      |=  =pro:ford:neo
-      ^-  manx
-      ;button
-        =hx-get  (spud (post-href %pro stud.pro))
-        =hx-target  "closest ha-wk"
-        =hx-swap  "innerHTML"
-        ; {<stud.pro>}
+  ;div.p2
+    ;div.p2.border.br1.fc.g2
+      ;h4.bold: Protocols
+      ;div.frw.g2
+        ;*
+        %+  turn  pro.file
+        |=  =pro:ford:neo
+        ^-  manx
+        ;a.p2.br1.b1.hover
+          =hx-get  (spud (post-href %pro stud.pro))
+          =hx-target  "closest ha-wk"
+          =hx-swap  "innerHTML"
+          ; {<stud.pro>}
+        ==
       ==
     ==
   ==
 ++  contents   
-  ;code.pre
+  ;code.pre.scroll-x.scroll-y.p2.block.mono
     ;* 
     %+  turn  src
     |=  lin=@t

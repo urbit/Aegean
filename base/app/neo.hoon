@@ -565,9 +565,8 @@
     ::
   ++  children
     ::
-    ;div.fc.g2.p2.ac
+    ;div.fc.g2.p2.ac.scroll-x.scroll-y
       =here  (en-tape:pith:neo here)
-      =label  "Home"
       ;*  %+  turn
           %+  skim
             ~(tap by (kid:of-top here))
@@ -905,9 +904,9 @@
   |=  =pith:neo
   ^-  ?
   |
-::  ?.  ?=([@ *] pith)
-::    |
-::  |(=('out' i.pith) =('pre' i.pith) =('src' i.pith) =('sky' i.pith))
+  ::?.  ?=([@ *] pith)
+  ::  |
+  ::|(=('out' i.pith) =('pre' i.pith) =('src' i.pith) =('sky' i.pith))
   ::
 ::
 ::

@@ -655,25 +655,23 @@
   |=  vax=vase
   =/  fim=(unit firm:neo)
     (mole |.(!<(firm:neo vax)))
-  ?:  =(1 1)
-    (fallback vax)
   ?>  ?=(^ fim)
-  ;div
+  ;div.p2.fc.g2
     ;h4: Shrub implementation
     ;h5: State
-    ;button
+    ;button.b1.br1.p2.hover.wfc
       =hx-get  (spud (post-href %pro state:u.fim))
       =hx-target  "closest ha-wk"
       =hx-swap  "innerHTML"
       ; {<state:u.fim>}
     ==
     ;h5: Pokes
-    ;div
+    ;div.frw.g2
       ;*
       %+  turn  ~(tap in poke:u.fim)
       |=  =stud:neo
       ^-  manx
-      ;button
+      ;button.p2.br1.b1.hover
         =hx-get  (spud (post-href %pro stud))
         =hx-target  "closest ha-wk"
         =hx-swap  "innerHTML"
