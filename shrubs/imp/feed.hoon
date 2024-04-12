@@ -1,9 +1,11 @@
+/@  feed-action
 |%
 ++  state  %sig
-++  poke   ~
+++  poke   (sy %feed-action ~)
 ++  kids   
   %-  ~(gas by *kids:neo)
-  :~  [~[|/%da |/%p] %entry %sig]
+  :~  [~[&/%mirror |/%p] %sig %sig]
+      [~[&/%source] %sig %source-diff]
   ==
 ++  deps   *deps:neo
 ++  form
@@ -11,9 +13,31 @@
   |_  [=bowl:neo =ever:neo state-vase=vase *]
   ++  poke
     |=  [=stud:neo vax=vase]
-    [~ vax]
+    ^-  (quip card:neo vase) 
+    ::?>  =(our.bowl src.bowl)
+    ?>  =(%feed-action stud)
+    =/  act  
+      ;;  feed-action
+      !<(feed-action vax)
+    :_  vax
+    ?-    -.act
+        %follow
+      =/  =conf:neo
+        (malt [[%source ~[p/ship.act %feed %source]] ~])
+      :~  :-  (welp here.bowl ~[%mirror p/ship.act]) 
+          [%make %mirror `!>(~) conf]
+      ==
+    ::
+        %post
+      :~  :-  (snoc here.bowl %source) 
+          [%poke %source-diff !>([%post entry.act])]
+      ==
+    ==
   ++  init
     |=  vas=(unit vase)
-    [~ *vase]
+    :_  *vase
+    :~  :-  (snoc here.bowl %source) 
+        [%make %source `!>(~) ~]
+    ==
   --
 --

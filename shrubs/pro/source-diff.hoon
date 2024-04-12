@@ -1,0 +1,3 @@
+/@  entry
+$%  [%post =entry]
+==
