@@ -44,8 +44,9 @@
     ::
         %del-photo
       ::  This will crash, no %tomb yet
-      :_  state-vase
-      ~[[(snoc here.bowl da/id.poke) %tomb ~]]
+      :::_  state-vase
+      ::~[[(snoc here.bowl da/id.poke) %tomb ~]]
+      `state-vase
     ==
   --
 --

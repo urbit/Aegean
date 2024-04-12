@@ -47,9 +47,7 @@
         %add    `sta(who (~(put in who.sta) ship.poke))
         %del    `sta(who (~(del in who.sta) ship.poke))
         %dbug   `sta
-        %msg    
-        ~&  deps.bowl
-        :_(sta (add-msg bowl msg.poke)^~)
+        %msg    :_(sta (add-msg bowl msg.poke)^~)
       ==
     ~&  dbug/"testing changes foo bar baz"
     [cards !>(sta)]

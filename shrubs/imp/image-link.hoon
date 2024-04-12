@@ -1,13 +1,6 @@
-/@  message
+/@  image-link
 |%
-::  +state: Type of state
-::  
-::    This is a doccord
-::
-++  state  %message
-::  +poke: Accepted poke handlers
-::
-::    None
+++  state  %image-link
 ++  poke   ~
 ++  kids   *kids:neo
 ++  deps   *deps:neo
@@ -16,9 +9,10 @@
   |_  [=bowl:neo =ever:neo state-vase=vase *]
   ++  poke
     |=  [=stud:neo vax=vase]
-    `state-vase
+    !!
   ++  init
     |=  vas=(unit vase)
+    ~&  vas
     `(need vas)
   --
 --

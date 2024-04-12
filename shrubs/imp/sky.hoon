@@ -1,14 +1,7 @@
-/@  message
+/@  sky
 |%
-::  +state: Type of state
-::  
-::    This is a doccord
-::
-++  state  %message
-::  +poke: Accepted poke handlers
-::
-::    None
-++  poke   ~
+++  state  %sky
+++  poke   (sy %sky ~)
 ++  kids   *kids:neo
 ++  deps   *deps:neo
 ++  form
@@ -16,7 +9,10 @@
   |_  [=bowl:neo =ever:neo state-vase=vase *]
   ++  poke
     |=  [=stud:neo vax=vase]
-    `state-vase
+    ^-  (quip card:neo vase)
+    ?>  =(%sky stud)
+    =/  new  (sky !<(sky vax))
+    `!>(new)
   ++  init
     |=  vas=(unit vase)
     `(need vas)

@@ -2,7 +2,7 @@
 :-  [%message %node]
 |=  mes=message
 ^-  manx
-;dl.border-8
+;dl
   ;dt: Author
   ;dd: {(scow %p from.mes)}
   ;dt: Time
