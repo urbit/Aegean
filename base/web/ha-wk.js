@@ -1,7 +1,7 @@
 customElements.define('ha-wk',
 class extends HTMLElement {
   static get observedAttributes() {
-    return ["stud", "here", "label"];
+    return ["stud", "here", "label", "tree-open"];
   }
   constructor() {
     //
@@ -20,12 +20,7 @@ class extends HTMLElement {
           z-index: 10;
           top: 0;
           left: 0;
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: between;
-          alignt-items: center;
           border: 2px solid var(--b3);
-          gap: 8px;
           padding: 8px;
           background-color: var(--b2);
         }
@@ -35,9 +30,6 @@ class extends HTMLElement {
           gap: 4px;
           flex-grow: 1;
           background-color: var(--b2);
-        }
-        aside {
-          flex-basis: 100%;
         }
       </style>
       <template id="button-template">
@@ -49,76 +41,79 @@ class extends HTMLElement {
           >
         </button>
       </template>
-      <section>
-        <button
-          class="b2 hover p1 br1 mono f2"
-          onclick="this.getRootNode().host.toggleTree(event)"
-          slot="crumbs"
-          >
-          z
-        </button>
-        <button
-          class="b2 hover p1 br1 mono f2"
-          onclick="this.getRootNode().host.toggleMore(event)"
-          slot="crumbs"
-          >
-          #
-        </button>
-        <div id="breadcrumbs">
-          <slot id="btns" name="crumbs"></slot>
-        </div>
-        <div id="actions" class="f2">
+      <section id="section" class="fc g2">
+        <nav class="fr g1">
           <button
-            class="b2 hover p1 br1 mono"
-            onclick="this.getRootNode().host.clone(event)"
+            id="tree-btn"
+            class="b2 hover p1 br1 mono f2"
+            onclick="this.getRootNode().host.toggleAttribute('tree-open')"
             slot="crumbs"
             >
-            c
+            z
           </button>
           <button
-            class="b2 hover p1 br1 mono"
-            onclick="this.getRootNode().host.raise(event)"
+            class="b2 hover p1 br1 mono f2"
+            onclick="this.getRootNode().host.toggleMore(event)"
             slot="crumbs"
             >
-            &lt;
+            #
           </button>
-          <button
-            class="b2 hover p1 br1 mono"
-            onclick="this.getRootNode().host.drop(event)"
-            slot="crumbs"
-            >
-            &gt;
-          </button>
-          <button
-            class="b2 hover p1 br1 mono"
-            onclick="this.getRootNode().host.burry(event)"
-            slot="crumbs"
-            >
-            _
-          </button>
-          <button
-            class="b2 hover p1 br1 mono"
-            onclick="this.getRootNode().host.suicide()"
-            slot="crumbs"
-            >
-            X
-          </button>
-        </div>
+          <div id="breadcrumbs">
+            <slot id="btns" name="crumbs"></slot>
+          </div>
+          <div id="actions" class="f2">
+            <button
+              class="b2 hover p1 br1 mono"
+              onclick="this.getRootNode().host.clone(event)"
+              slot="crumbs"
+              >
+              c
+            </button>
+            <button
+              class="b2 hover p1 br1 mono"
+              onclick="this.getRootNode().host.raise(event)"
+              slot="crumbs"
+              >
+              &lt;
+            </button>
+            <button
+              class="b2 hover p1 br1 mono"
+              onclick="this.getRootNode().host.drop(event)"
+              slot="crumbs"
+              >
+              &gt;
+            </button>
+            <button
+              class="b2 hover p1 br1 mono"
+              onclick="this.getRootNode().host.burry(event)"
+              slot="crumbs"
+              >
+              _
+            </button>
+            <button
+              class="b2 hover p1 br1 mono"
+              onclick="this.getRootNode().host.suicide()"
+              slot="crumbs"
+              >
+              X
+            </button>
+          </div>
+        </nav>
         <aside id="aside" class="hidden p3 b3 fc g3 br1">
           <div class="frw g2">
             <button
-              onclick="this.getRootNode().host.inspect()"
-              class="b3 hover p1 br1 mono"
-              id="stud"
+                   onclick="this.getRootNode().host.inspect()"
+                   class="b3 hover p1 br1 mono"
+                   id="stud"
               ></button>
           </div>
         </aside>
-        <div id="tree" class="hidden p3 b3 fc g3 br1 basis-full">
-          <h1 class="bold">tree</h1>
-          <p>not yet implemented</p>
-        </div>
+          </div>
       </section>
-      <slot id="slot"></slot>
+      <div id="tree" class="hidden grow scroll-y scroll-x p2 b2">
+        <slot name="tree">Tree view</slot>
+      </div>
+      <slot id="slot">Nothing here</slot>
     `;
   }
   connectedCallback() {
@@ -129,9 +124,15 @@ class extends HTMLElement {
       this.gid("btns").assignedNodes().forEach(n => n.remove())
       if (nodes.length) {
         let wrapped = nodes[0];
+        if (wrapped.hasAttribute("empty")) {
+          this.setAttribute("tree-open", "")
+        } else {
+          this.removeAttribute("tree-open");
+        }
         this.setAttribute("stud", wrapped.getAttribute("stud"));
         if (wrapped.hasAttribute("here")) {
           let here = wrapped.getAttribute("here");
+          here = here === "/" ? "" : here;
           let label = wrapped.getAttribute("label");
           this.setAttribute("here", here);
           if (label) {
@@ -141,10 +142,6 @@ class extends HTMLElement {
           }
           //
           let segments = here.split("/");
-          if (segments.slice(-1)[0] === "") {
-            // trim on / path
-            segments = segments.slice(0, -1);
-          }
           segments.forEach((s, i) => {
             let btn = this.gid('button-template').content.cloneNode(true);
             btn = btn.querySelector('button');
@@ -153,11 +150,21 @@ class extends HTMLElement {
             btn.textContent = s + "/";
             this.appendChild(btn);
           })
+          let treeStub = document.createElement("div");
+          treeStub.setAttribute("hx-get", `/neo/hawk${here}?tree`);
+          treeStub.setAttribute("hx-target", `this`);
+          treeStub.setAttribute("hx-trigger", `load`);
+          treeStub.setAttribute("hx-swap", `outerHTML`);
+          treeStub.setAttribute("slot", "tree");
+          this.appendChild(treeStub);
+
           htmx.process(document.body);
         } else {
           this.removeAttribute("here");
           this.removeAttribute("label");
         }
+      } else {
+        this.setAttribute("tree-open", "");
       }
       const event = new CustomEvent('here-change', {composed: true});
       this.dispatchEvent(event);
@@ -179,11 +186,27 @@ class extends HTMLElement {
         composed: true,
       });
       this.dispatchEvent(event);
+    } else if (name === "tree-open") {
+      let open = newValue !== null;
+      if (open) {
+        this.slotted.classList.add("hidden");
+        /* this.gid("section").classList.add("grow"); */
+        this.gid("tree").classList.remove("hidden");
+        this.gid("tree-btn").classList.add("b3");
+      } else {
+        this.slotted.classList.remove("hidden");
+        /* this.gid("section").classList.remove("grow"); */
+        this.gid("tree").classList.add("hidden");
+        this.gid("tree-btn").classList.remove("b3");
+      }
     }
   }
   gid(id) {
     //
     return this.shadowRoot.getElementById(id);
+  }
+  get slotted() {
+    return (this.gid("slot").assignedNodes() || [null])[0]
   }
   inspect() {
     const event = new CustomEvent('inspect-hawk', {
@@ -197,10 +220,6 @@ class extends HTMLElement {
   }
   toggleMore(e) {
     this.gid("aside").classList.toggle("hidden");
-    e.target.classList.toggle("b3");
-  }
-  toggleTree(e) {
-    this.gid("tree").classList.toggle("hidden");
     e.target.classList.toggle("b3");
   }
   clone() {

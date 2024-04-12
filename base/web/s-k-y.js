@@ -215,7 +215,7 @@ class extends HTMLElement {
       let add = tab?.firstElementChild;
       let sel = add.nextElementSibling;
       let del = sel.nextElementSibling;
-      sel.textContent = label || here;
+      sel.textContent = label || here || "/";
       sel.addEventListener('click', (e) => {
         e.preventDefault();
         this.insertAdjacentElement("afterbegin", f);

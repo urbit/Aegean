@@ -561,27 +561,38 @@
   ++  curr
     ::
     =/  rom  (get:of-top here)
-    ?~  rom  children
+    =-  -(a.g [[%here (en-tape:pith:neo here)] a.g.-])
+    ^-  manx
+    ?~  rom
+      ;div.wf.hf.fc.ac.jc(empty ""): nothing here
+    =/  =room:neo  u.rom
+    =/  stud  ^-  @tas  ?^(state.room mark.state.room state.room)
+    =-  -(a.g [[%stud (trip stud)] a.g.-])
     (val u.rom)
     ::
   ++  children
     ::
     =/  dirs
-      ^-  (set iota)
+      ^-  (list iota)
+      %~  tap  in
       %-  silt
       %+  turn  ~(tap by (kid:of-top here))
       |=  [=pith:neo *]
       -.pith
-    ;div.fc.g2.p2.ac.scroll-x.scroll-y
+    ;div.wf.hf.fc.g1.js.ac.scroll-x.scroll-y
       =here  (en-tape:pith:neo here)
+      =slot  "tree"
       ;*
+      ?~  (lent dirs)
+        ;=
+          ;div.wf.hf.fc.ac.jc: no children
+        ==
       %+  turn
         :: alphabetical sort
         ^-  (list iota)
-        (sort ~(tap in dirs) aor)
+        (sort dirs aor)
       |=  =iota
       ;button.p2.br1.b1.hover.wf.fr.js
-        =style  "max-width: 650px;"
         =hx-get  (en-tape:pith:neo :(weld /neo/hawk here /[iota]))
         =hx-target  "closest ha-wk"
         =hx-swap  "innerHTML"
@@ -594,8 +605,6 @@
     |=  =room:neo
     ^-  manx
     =+  !<(grow=$-(pail:neo $-(=bowl:neo manx)) (all-grow %htmx))
-    =/  stud  ^-  @tas  ?^(state.room mark.state.room state.room)
-    =-  -(a.g [[%here (en-tape:pith:neo here)] [%stud (trip stud)] a.g.-])
     ^-  manx
     =/  res=(each $-(=bowl:neo manx) tang)
       (mule |.((grow [state.room state.icon.room])))
@@ -890,6 +899,8 @@
           ::
           %-  send
           %-  manx-response:gen:serv
+          ?:  (~(has by pam.purl) 'tree')
+            children:dov
           curr:dov
         ::
     =/  =path  t.t.site.line
