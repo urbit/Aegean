@@ -26,7 +26,7 @@ class extends HTMLElement {
           class="p2 bold b2 br2 hover mono wfc"
           onclick="this.getRootNode().host.toggleAttribute('open')"
           >
-          ≡
+          ~
         </button>
         <div id="aside" class="fc g2 hidden wf" style="width: 200px; user-select: none;">
           <button
@@ -162,7 +162,6 @@ class extends HTMLElement {
       // display hawk
       s.style.maxWidth = '100%';
       s.style.maxHeight = '100%';
-      s.classList.add("border");
       s.classList.add("b0");
       s.classList.add("scroll-y");
       s.classList.add("scroll-x");
@@ -225,7 +224,6 @@ class extends HTMLElement {
       del.addEventListener('click', (e) => {
         e.preventDefault();
         f.suicide();
-        this.trueSlots();
       })
       tabs.appendChild(tab);
     })
@@ -234,7 +232,8 @@ class extends HTMLElement {
     //
     let hawk = document.createElement("ha-wk");
     let stub = document.createElement("div");
-    stub.setAttribute("hx-get", here || "/neo/hawk");
+    stub.setAttribute("hx-get", here || "/neo/hawk/home");
+    stub.setAttribute("hx-target", "this");
     stub.setAttribute("hx-swap", "outerHTML");
     stub.setAttribute("hx-trigger", "load");
     hawk.appendChild(stub);

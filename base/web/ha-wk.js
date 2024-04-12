@@ -24,6 +24,7 @@ class extends HTMLElement {
           flex-wrap: wrap;
           justify-content: between;
           alignt-items: center;
+          border: 2px solid var(--b3);
           gap: 8px;
           padding: 8px;
           background-color: var(--b2);
@@ -158,7 +159,6 @@ class extends HTMLElement {
           this.removeAttribute("label");
         }
       }
-      console.log('here-change', this);
       const event = new CustomEvent('here-change', {composed: true});
       this.dispatchEvent(event);
     })

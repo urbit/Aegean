@@ -565,20 +565,27 @@
     ::
   ++  children
     ::
+    =/  dirs
+      ^-  (set iota)
+      %-  silt
+      %+  turn  ~(tap by (kid:of-top here))
+      |=  [=pith:neo *]
+      -.pith
     ;div.fc.g2.p2.ac.scroll-x.scroll-y
       =here  (en-tape:pith:neo here)
-      ;*  %+  turn
-          %+  skim
-            ~(tap by (kid:of-top here))
-          |=([=pith *] !(is-sys pith))
-        |=  [=pith *]
-        ;button.p2.br1.b1.hover.wf
-          =style  "max-width: 650px;"
-          =hx-get  (en-tape:pith:neo :(weld /neo/hawk here pith))
-          =hx-target  "closest ha-wk"
-          =hx-swap  "innerHTML"
-          ; {(en-tape:pith:neo pith)}
-        ==
+      ;*
+      %+  turn
+        :: alphabetical sort
+        ^-  (list iota)
+        (sort ~(tap in dirs) aor)
+      |=  =iota
+      ;button.p2.br1.b1.hover.wf.fr.js
+        =style  "max-width: 650px;"
+        =hx-get  (en-tape:pith:neo :(weld /neo/hawk here /[iota]))
+        =hx-target  "closest ha-wk"
+        =hx-swap  "innerHTML"
+        ; {(trip ?@(iota iota (scot iota)))}
+      ==
     ==
     ::
   ++  val
@@ -796,8 +803,8 @@
             ^-  (list card:neo)
             :~
               [(weld #/[p/our.bowl] here) %make %sky `!>(%system) ~]
-              [#/[p/our.bowl]/diary %make %diary `!>('') ~]
-              [#/[p/our.bowl]/iframes/wikipedia %make %iframe `!>('https://en.wikiepdia.org') ~]
+              [#/[p/our.bowl]/home/diary %make %diary `!>('') ~]
+              [#/[p/our.bowl]/home/iframes/wiki %make %iframe `!>('https://en.wikiepdia.org') ~]
             ==
             |-
             ?~  bootstrap
@@ -806,6 +813,7 @@
               %-  ~(lift dove pax.purl)
               ;div.wf.hf.fc.jc.ac
                 =hx-get  "/neo/sky"
+                =hx-target  "this"
                 =hx-swap  "outerHTML"
                 =hx-trigger  "load"
                 ; initializing
@@ -900,14 +908,6 @@
     =.  http-req.unix  (~(del by http-req.unix) eyre-id)
     (response pole)
   --
-++  is-sys
-  |=  =pith:neo
-  ^-  ?
-  |
-  ::?.  ?=([@ *] pith)
-  ::  |
-  ::|(=('out' i.pith) =('pre' i.pith) =('src' i.pith) =('sky' i.pith))
-  ::
 ::
 ::
 ++  on-card
