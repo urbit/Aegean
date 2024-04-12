@@ -9,6 +9,7 @@
 /*  txt-ford-face   %hoon   /neo/src/std/imp/ford-face/hoon
 /*  txt-ford-reef   %hoon   /neo/src/std/imp/ford-reef/hoon
 /*  date-now   %js   /web/date-now/js
+/*  error-tray   %js   /web/error-tray/js
 /*  atom-input   %js   /web/atom-input/js
 /*  multiline-input   %js   /web/multiline-input/js
 /*  ha-wk   %js   /web/ha-wk/js
@@ -691,9 +692,15 @@
     ;html
       ;head
         ;meta(charset "UTF-8");
-        ;title: %sky
+        ;title: s k y
         ;script(src "https://unpkg.com/htmx.org@1.9.11");
+        ;script(src "https://unpkg.com/htmx.org@1.9.11/dist/ext/response-targets.js");
         ;script: {html-enc-js}
+        ;meta
+          =name  "htmx-config"
+          =content  (trip '{"ignoreTitle":"true"}')
+          ;
+        ==
         ;style
           ;+  ;/  %-  trip
           '''
@@ -721,12 +728,19 @@
         ==
         ;script: {(trip date-now)}
         ;script: {(trip atom-input)}
+        ;script: {(trip error-tray)}
         ;script: {(trip multiline-input)}
         ;script: {(trip ha-wk)}
         ;script: {(trip s-k-y)}
         ;+  favicon
       ==
-      ;body(hx-ext "html-enc", hx-swap "outerHTML")
+      ;body
+        =hx-ext  "html-enc,response-targets"
+        =hx-swap  "innerHTML"
+        =hx-boost  "true"
+        =hx-history  "false"
+        =hx-replace-url  "/neo/sky"
+        =hx-target  "closest ha-wk"
         ;+  in
       ==
     ==

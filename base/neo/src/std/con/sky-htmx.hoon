@@ -66,7 +66,9 @@
     ?:  =(theme %dark)  theme-dark
     theme-system
     ::
-  ;div.wf.b1(style "min-height: 100vh;")
+  ;div.wf.b1
+    =style  "min-height: 100vh;"
+    =hx-target-error  "#error"
     ;style: {colors}
     ;s-k-y.wf.hf(open "", hawks "0")
       ;*  %:  turn  ~(tap by kids:bowl)
@@ -81,5 +83,6 @@
         ==
       ==
     ==
+    ;error-tray#error;
   ==
 --
