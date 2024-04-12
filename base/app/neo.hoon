@@ -818,7 +818,7 @@
             :~
               [(weld #/[p/our.bowl] here) %make %sky `!>(%system) ~]
               [#/[p/our.bowl]/home/diary %make %diary `!>('') ~]
-              [#/[p/our.bowl]/home/iframes/wiki %make %iframe `!>('https://en.wikiepdia.org') ~]
+              [#/[p/our.bowl]/home/iframes/wiki %make %iframe `!>('https://en.wikipedia.org/wiki/Main_Page') ~]
             ==
             |-
             ?~  bootstrap
