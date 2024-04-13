@@ -1,6 +1,6 @@
-/@  image-link
+/@  custom-message
 |%
-++  state  %image-link
+++  state  %custom-message
 ++  poke   ~
 ++  kids   *kids:neo
 ++  deps   *deps:neo
@@ -12,7 +12,6 @@
     !!
   ++  init
     |=  vas=(unit vase)
-    ~&  vas
     `(need vas)
   --
 --

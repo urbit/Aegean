@@ -170,7 +170,7 @@
       %report
     ~&  >  'report poke'
     =/  paf  (weld (scry-prefix time.r) path.act)
-    (emit [%pass /report %arvo %a %keen author.r paf])
+    (emit [%pass /report %arvo %a %keen ~ author.r paf])
   ::
       %save
     that(saved (~(put in saved) r))
@@ -212,7 +212,7 @@
     =/  ref  ref.signal.msg
     ?>  (lte hops.signal.msg 2)  :: reject hop hackers
     =/  paf  (weld (scry-prefix time.ref) (ref-to-path ref))
-    =.  that  (emit [%pass /scry %arvo %a %keen author.ref paf])
+    =.  that  (emit [%pass /scry %arvo %a %keen ~ author.ref paf])
     =.  store  (~(put by store) ref ~)
     (broadcast signal.msg)
   ::
