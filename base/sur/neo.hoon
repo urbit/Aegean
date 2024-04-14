@@ -1,4 +1,3 @@
-/+  dprint
 ::  $neo: New Shrub
 ::
 ::    Urbit is a namespace, from a path -> data
@@ -17,38 +16,72 @@
 ::
 ::  
 |%
-++  dprint  dprint
+::  $care: Perspective
+::    
 +$  care
   $?  %x  :: single node
       %y  :: single node and immediate children
       %z  :: single node and all descendants
   ==
+::  $tour: perspective and shrub
+::    
 +$  tour   [=care =pith]
+::  $block: call-stack state for blocking semantics
+::    
 +$  block  [get=(set tour) err=(unit tang)]
-+$  curb   @ud :: blocking request ID
+::  $halt: Currently blocked flows and indices
+::
 +$  halt
   $:  by-tour=(map tour flow)
       by-flow=(jug flow tour)
       clog=(map flow (qeu move))
   ==
+::  $flow: Call direction
+::  
+::    .p is the source
+::    .q is the destination
+::
 +$  flow  (pair pith pith)
+::  $disk: Reference to a suite of code
+::
+::    If sig case, then refers to the %std disk
 +$  disk
   $@(~ [=ship =term])
+::  $tack: Type of code being distributed
+::
+::    %con: CONverter of protocols
+::    %imp: IMPlemenation of shrub
+::    %pro: PROtocol (type)
+::
 +$  tack
   ?(%con %imp %pro)
+::  $post: Name of code being distributed
+::
 +$  post  (pair tack stud)
+::
+::  +get-stud-name: Get name for $stud
+::
 ++  get-stud-name
   |=  =stud
   ?@  stud  stud
   mark.stud
+::  +drive: Path multiplexer core
+::
 ++  drive
   |%
+  ::  +en:drive: Multiplex several paths into one
+  ::    
+  ::    See also: (+de:drive)
   ++  en
     =|  res=pith
     |=  ps=(list pith)
     ?~  ps
       res
     $(res (welp res [%ud (lent i.ps)] i.ps), ps t.ps)
+  ::  +de:drive: Demultiplex one path into several
+  ::    
+  ::    See also: (+en:drive)
+
   ++  de
     =|  res=(list pith)
     |=  pax=(pole iota)
@@ -60,9 +93,23 @@
       `[pith (pole iota)]`[(scag [len rest]:pax) (slag [len rest]:pax)]
     $(res [nex res])
   --
-::
+::  +ford: Container for build system bootstrapping
 ++  ford
   |%
+  ++  desk
+    |%
+    ++  kids  *^kids
+    --
+  ++  is-stud
+    |=  s=stud
+    ?^  s  |
+    =(%ford (end [3 4] s))
+  ::  +riff:ford: Constant build system node
+  ::  
+  ::    Required for bootstrapping. This is used to put the reef and
+  ::    other ford combinators into the build system to bootstrap
+  ::    everything else. To update a riff, simply %make over the top
+  ::
   ++  riff
     ^-  firm
     |%
@@ -86,33 +133,62 @@
         `!>(`[cache=(unit vase) ~]`[`ref ~])
       --
     --
-  ++  dep  `fief`[& %x %ford-in %ford-out]
+  ::  +dep:ford: $fief for a ford dependency
+  ::  
+  ::    Handy shortcut to specifiy a dependency in the build system
+  ++  dep  `fief`[& [%ford-out %ford-in] ~]
+  ::  +get-output: pull build resuit of dependency
+  ::
   ++  get-output
     |=  [=bowl =term]
     ^-  (unit vase)
-    =+  !<([vax=(unit vase) *] q.pail.q:(~(got by deps.bowl) term))
+    =/  outer   q.pail.q:(~(got by deps.bowl) term)
+    =+  !<([vax=(unit vase) *] outer)
     vax
   ::
   ++  run
     |=  txt=@t
     (scan (trip txt) (rein *name))
+  +$  loc
+    [=disk =pith]
+  ::  $lib:ford: Specification of library import
+  ::
   +$  lib
-    [face=term =name]
+    [face=term =loc]
+  ::  $pro:ford: Specification of protocol import
+  ::
   +$  pro
     [face=term =stud]
   +$  vale
     [face=term =stud]
+  ::  $file:ford: Code with imports
+  ::
   +$  file
     $:  pro=(list pro)
         :: grab=(list 
         lib=(list lib)
         =hoon
     ==
+  ::  +rein:ford: Parse code with imports
   ++  rein
     |=  =name
     =<  apex
     |%
-    ++  nam
+    ++  dis  
+      ;~  pose
+        (cold ~ cab)
+        ;~((glue bar) ;~(pfix sig fed:ag) sym)
+      ==
+    ::  +lib-loc: Parse library location
+    ::
+    ++  lib-loc
+      ;~(plug dis stip)
+    ::  +old-nam: Parse file path (deprecated: XX revisit)
+    ::
+    ::     Examples:
+    ::     Absolute ~hastuc-dibtux/src/foo/bar/test
+    ::     Relative %^/bar
+    ++  old-nam
       :: ^-  $-(nail (like name:neo))
       ;~  pose
         %+  sear 
@@ -121,15 +197,26 @@
           %-  mole
           |.  ^-  ^name
           =.  pit  (scag (sub (lent pit) (lent kets)) pit)
+          =-  ~&(parsed-name/- -)
           name(pith (welp pith.name pit))
         ;~(pfix cen ;~(plug (star ket) stip))                     :: relative
         ;~(plug ;~(pfix fas sig fed:ag) stip) :: absolute
       ==
+    ::  +std:rein:ford: Parse import directive
+    ::
+    ::    Either  name:~ship/desk
+    ::    or      name (from %std disk)
+    ::
     ++  std
       ;~  pose
         ;~(plug sym ;~(pfix col sig fed:ag) ;~(pfix fas sym))
         sym
       ==
+    ::  +pro:rein:ford: Parse protocol import directive
+    ::
+    ::    /@  foo=bar  :: imports %bar protocol from %std disk with name foo
+    ::    /@  bar      :: imports %bar protocol from %std disk with name bar
+    ::
     ++  pro
       :: ^-  $-(nail (like ^pro))
       %+  rune  pat
@@ -142,16 +229,37 @@
         std
       ==
     ++  lib
+      %+  rune  hep
+      ;~  pose
+        ;~(plug sym ;~(pfix tis lib-loc))
+        %+  cook
+          |=  [=disk =pith]
+          ^-  ^lib
+          =/  last  (rear pith)
+          ?>  ?=(@ last)
+          [`@tas`last disk pith]
+        lib-loc
+      ==
+
+    ::  +old-lib: Parse arbitrary library import directive
+    ::
+    ::    Unused, todo revive with more recursive build system
+    ::
+    ::    /-  face=~hastuc-dibtux/foo/bar <- imports ~hastuc-dibtux
+    ::    /-  %^/bar <- imports bar/hoon up one level with face bar
+    ::
+    ++  old-lib
       :: ^-  $-(nail (like ^lib))
       %+  rune  hep
       ;~  pose
-        ;~(plug sym ;~(pfix tis nam))
+        ;~(plug sym ;~(pfix tis old-nam))
         %+  cook
           |=  n=^name
           =/  last  (rear pith.n)
-          ?>  ?=(@ last)
-          [last n]
-        nam
+          :_  n
+          ?@  last  last
+          (scot last)
+        old-nam
       ==
     ++  rune
       |*  [car=rule rul=rule]
@@ -175,49 +283,88 @@
         hone
       ==
     --
+  ::  +with-face:ford: Decorate vase with face
+  ::
   ++  with-face
     |=  [fac=@tas =vase]
     vase(p [%face fac p.vase])
+  ::  +with-faces:ford: Decorate vases with faces, slopped onto reef
+  ::
   ++  with-faces
     |=  [reef=vase faces=(list (pair term vase))]
     ?~  faces
       reef
     $(reef (slop (with-face i.faces) reef), faces t.faces)
   --
+::  +behn: Timer vane
 ++  behn
   |%
+  ::  $req: Timer request
+  ::
+  ::    %wait: Set timer
+  ::    %rest: Cancel timer
+  ::
   +$  req  $>(?(%rest %wait) task:^behn)
+  ::  $behnres: Timer response
+  ::
+  ::    %wake: Timer went off
+  ::
   +$  res  $>(%wake gift:^behn)
   --
+::  +clay: Filesystem overlay
+::
 ++  clay
   |%
-  +$  peer  [=care =desk =path]
+  ::  $peer:clay: Request for file(s) subscription
+  ::
+  +$  peer  [=desk =path]
+  ::
+  ::  $req:clay: Filesystem request
+  ::   
+  ::    %peer: Setup file subscription at .pith
+  ::    %pull: Cancel file subscripiton at .pith
+  ::
   +$  req
     $%  [%peer =pith =peer]
         [%pull =pith]
     ==
-  +$  res  (pair pith $>(?(%wris %writ) gift:^clay))
+  ::  $res:clay: Filesystem response
+  +$  res  [=pith case=@ud files=(axol cage)]
   --
-::  Total version
+::
+::  $ever: Total shrub version
+::
+::    .node is incremented only when the shrub itself changes i.e. it
+::    versions the %x care
+::    .tree is incremented when the shrub or any of its children changes
+::    i.e. it versions the %y care
+::
 +$  ever  [node=@ud tree=@ud]
-::  $once: reference to version
+::  $once: Partial version
+::
+::    Identify shrub by either %node or %tree, as per $ever
+::
 +$  once  $%([%node p=@ud] [%tree p=@ud])
+::
 ::  $road: fully qualified path
 +$  road   [=name =once grab=pith]
-:: +$  pike   (each road name)
 :: * A `$bolt` is a `[=stud =once]`
 ::
-::  $peer: subscription metadata
+::  $peer: Subscription
 +$  peer
   [=pulp =path]
+
 ::  $tone: parent change tracking
+::
 +$  tone
   $%  [%peer =peer]
       [%rely =term =pith]
   ==
 ::  $sound: internal change tracking listeners
+::
 +$  sound
   (jug tour tone)
+::
 ::  $noise: external change tracking listeners
 +$  noise
   (jug tour rely)
@@ -226,7 +373,7 @@
   [=term =pith]
 ::  $riot: foreign mirror
 +$  riot
-  [=cane deps=(set rave)]
+  [=cane deps=(set rave) =slip]
 ::
 ::  $ring: node change tracking
 ::
@@ -429,9 +576,11 @@
     ?>  ?=(^ from)
     ?>  =(i.del i.from)
     $(del t.del, from t.from)
+  ::
   ++  en-cord
     |=  pit=$
     (spat (pout pit))
+  ::
   ++  prefix
     =|  res=$
     |=  [long=$ curt=$]
@@ -441,6 +590,7 @@
     ?.  =(i.long i.curt)
       ~
     $(long t.long, curt t.curt, res [i.long res])
+  ::
   ++  suffix
     |=  [long=$ curt=$]
     ^-  _curt
@@ -475,6 +625,8 @@
       ~
     `[+.i.pith t.pith]
   --
+++  axol  ^axal
+++  axol-of  ^of
 ++  axal
   |$  [item]  
   [fil=(unit item) kid=(map iota $)]
@@ -682,7 +834,7 @@
 +$  note
   $%  [%make made] :: todo: configuration values, init cannot be ^ if installing over
       [%poke =pail]
-      [%tomb cas=(unit care)]    :: tom
+      [%tomb cas=(unit case)]    :: tom
       [%link from=pith src=stud] :: XX deprecate
   ==
 +$  raw-poke
@@ -992,17 +1144,25 @@
       here=pith :: 
       now=@da
       deps=(map term (pair pith cane))
-      kids=(map pith vase) :: XX: vase -> pail
+      kids=(map pith pail)
   ==
-+$  quay
-  $%  [%x =port]
-      [%y =dock]
-      [%z =dock]
-  ==
+++  quay
+  =<  quay
+  |%
+  +$  quay   (pair port (unit (pair care kids)))
+  ++  get-care
+    |=  q=quay
+    ^-  care
+    ?~  q.q
+      %x
+    p.u.q.q
+  --
 +$  fief  [required=? =quay]
 +$  dock  [=port =kids]
 +$  port :: TODO: how to specify behaviour
   [state=stud diff=stud] :: state, diff actually $stud
++$  slip
+  [state=stud diffs=(set stud) =kids]
 +$  deps  (map term fief)
 +$  kids  (map pish port)
 ::  $firm: type of the value in the urbit namespace
@@ -1042,6 +1202,7 @@
   ::  in the name
   ++  deps   *(map term fief)
   --
+::
 +$  form
   $_  ^|
   |_  [=bowl =icon]
@@ -1055,5 +1216,27 @@
   ++  init
     |~  old=(unit vase)
     *(quip card vase)
+  --
+++  peon
+  |%
+  ++  match
+    |=  [nedl=pish hstk=pith]
+    ^-  ?
+    ?~  nedl
+      =(~ hstk)
+    ?~  hstk
+      |
+    ?:  ?=(%& -.i.nedl)
+      &(=(p.i.nedl i.hstk) $(nedl t.nedl, hstk t.hstk))
+    ?@  i.hstk
+      =(p.i.nedl %tas)
+    &(=(-.i.hstk p.i.nedl) $(nedl t.nedl, hstk t.hstk))
+      
+  ++  find
+    |=  [pax=pith pis=(set pish)]
+    ^-  (unit pish)
+    ?~  lis=(skim ~(tap in pis) |=(pish (match +< pax)))
+      ~
+    `i.lis
   --
 --

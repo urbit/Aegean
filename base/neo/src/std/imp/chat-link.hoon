@@ -18,28 +18,29 @@
   =/  msg=pail:neo  pail:(~(got by kids.dep) pit)
   !<(message q.msg)
 --
+^-  firm:neo
 |%
 ++  state  %chat-link
 ++  poke   (sy %rely ~)
 ++  kids
   %-  ~(gas by *kids:neo)
   :~  :-  ~[&/%messages |/%da]
-      [%message-link %sig]
+      [%message %sig]
   ==
-++  deps  *deps:neo
-::  %-  ~(gas by *deps:neo)
-::  :~
-::  ::
-::    :-  %src
-::    ::
-::    :+  req=&  [%chat %sig]
-::    :+  ~  %y
-::    %-  ~(gas by *kids:neo)
-::    :~  :-  ~[&/%messages |/%da]
-::        [%message %sig]
-::  ::
-::    ==
-::  ==
+++  deps
+  %-  ~(gas by *deps:neo)
+  :~
+  ::
+    :-  %src
+    ::
+    :+  req=&  [%chat %sig]
+    :+  ~  %y
+    %-  ~(gas by *kids:neo)
+    :~  :-  ~[&/%messages |/%da]
+        [%message %sig]
+  ::
+    ==
+  ==
 ++  form
   ^-  form:neo
   |_  [=bowl:neo =ever:neo state-vase=vase *]

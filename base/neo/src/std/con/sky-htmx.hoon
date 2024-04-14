@@ -72,7 +72,7 @@
     ;style: {colors}
     ;s-k-y.wf.hf(open "", hawks "0")
       ;*  %:  turn  ~(tap by kids:bowl)
-        |=  [=pith =vase]
+        |=  [=pith =pail:neo]
         ;ha-wk
           =hx-get  "/neo/hawk{(en-tape:pith:neo pith)}"
           =hx-trigger  "load"

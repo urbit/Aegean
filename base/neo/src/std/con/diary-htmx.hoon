@@ -27,8 +27,8 @@
   ::
 ++  link-entry
   ::
-  |=  [pax=pith vax=vase]
-  =/  tape  (trip !<(@t vax))
+  |=  [pax=pith =pail:neo]
+  =/  tape  (trip !<(@t q.pail))
   =/  subject-end  (fall (find [10]~ tape) 56)
   =/  subject  (scag subject-end tape)
   =/  id  (trip (snag 0 (pout pax)))

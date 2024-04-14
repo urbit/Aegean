@@ -4,12 +4,13 @@
 --
 ^-  firm:neo
 |%
-++  state  %clay-desk
+++  state  %hoon
 ++  poke   (sy %clay-res ~)
 ++  deps   *deps:neo
-++  kids  kids:desk:ford:neo
+++  kids   *kids:neo
 ++  form
   |_  [=bowl:neo =ever:neo state=vase *]
+  +*  sta  !<(@t state-vase)
   ++  poke
     |=  [=stud:neo vax=vase]
     ^-  (quip card:neo vase)
@@ -17,12 +18,7 @@
     =+  !<(=res:clay:neo vax)
     :_  state
     ~&  res/res
-    %+  murn  ~(tap of files.res)
-    |=  [=path =mark =vase]
-    ^-  (unit card:neo)
-    ?.  =(mark %hoon)
-      ~
-    `[(welp here.bowl (pave:neo (snip path))) %make %hoon `vase ~]
+    ~
   ++  init
     |=  old=(unit vase)
     =+  !<(=desk (need old))
