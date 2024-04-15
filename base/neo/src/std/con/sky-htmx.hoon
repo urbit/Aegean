@@ -70,15 +70,18 @@
     =style  "min-height: 100vh;"
     =hx-target-error  "#error"
     ;style: {colors}
-    ;s-k-y.wf.hf(open "", hawks "0")
-      ;*  %:  turn  ~(tap by kids:bowl)
-        |=  [=pith =pail:neo]
+    ;s-k-y.wf.hf(open "", hawks "{<slots.sky>}")
+      ;*  %:  turn  hawks.sky
+        |=  =pith
         ;ha-wk
-          =hx-get  "/neo/hawk{(en-tape:pith:neo pith)}"
-          =hx-trigger  "load"
-          =hx-swap  "innerHTML"
-          ;div.wf.hf.fc.jc.ac.f2
-            ; loading . . .
+          ;div
+            =hx-get  "/neo/hawk{(en-tape:pith:neo pith)}"
+            =hx-trigger  "load"
+            =hx-target  "this"
+            =hx-swap  "outerHTML"
+            ;div.wf.hf.fc.jc.ac.f2
+              ; loading . . .
+            ==
           ==
         ==
       ==

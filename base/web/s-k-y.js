@@ -249,13 +249,29 @@ class extends HTMLElement {
     this.grow();
     htmx.process(document.body);
     this.updateTabs();
+    this.syncTabs();
   }
   cull() {
     this.setAttribute("hawks", Math.max(0, this.hawks - 1));
     this.trueSlots();
+    this.syncTabs();
   }
   grow() {
     this.setAttribute("hawks", Math.min(4, this.children.length, this.hawks + 1));
     this.trueSlots();
+    this.syncTabs();
+  }
+  async syncTabs() {
+    let frames = [...this.childNodes];
+    let forms = frames.map(f => {
+      return `
+      <p here="${f.getAttribute('here')}"></p>
+      `
+    })
+    await fetch(`/neo/hawk/sky?stud=sky`, {
+      method: 'POST',
+      headers: {'content-type': 'text/html'},
+      body: `<div slots="${this.hawks}">${forms.join("")}</div>`
+    })
   }
 });

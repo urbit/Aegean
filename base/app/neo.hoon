@@ -692,14 +692,13 @@
       =+  man=[u=p.res ~]
       %-  u.man
       =+  b=*bowl.neo  :: manually constructing a bowl. this is ugly
-      b
-      ::%=  b
-      ::  here  here
-      ::  kids
-      ::    %-  ~(run by (kid:of-top here))
-      ::    |=  =room:neo
-      ::    state.icon.room
-      ::==
+      %=  b
+        here  here
+        kids
+          %-  ~(run by (kid:of-top here))
+          |=  =room:neo
+          [state.room state.icon.room]
+      ==
     ;div.p3.fc.g3
       ;div.f-error.fc.g2
         ;span: unable to render as %htmx
@@ -907,7 +906,7 @@
           =/  bootstrap
             ^-  (list card:neo)
             :~
-              [(weld #/[p/our.bowl] here) %make %sky `!>(%system) ~]
+              [(weld #/[p/our.bowl] here) %make %sky `!>([%system ~ 0]) ~]
               [#/[p/our.bowl]/home/diary %make %diary `!>('') ~]
               [#/[p/our.bowl]/home/iframes/wiki %make %iframe `!>('https://en.wikipedia.org/wiki/Main_Page') ~]
             ==
@@ -934,17 +933,17 @@
         %-  ~(lift dove pax.purl)
         =+  !<(grow=$-(pail:neo $-(=bowl:neo manx)) (all-grow %htmx))
         ?~  man=(mole |.((grow [%sky state.icon.u.rum])))
+          ~&  'could not convert sky to htmx'
           !!
         %-  u.man
         =+  b=*bowl.neo
-        b
-        ::%=  b
-        ::  here  here
-        ::  kids
-        ::    %-  ~(run by (kid:of-top here))
-        ::    |=  =room:neo
-        ::    state.icon.room
-        ::==
+        %=  b
+          here  here
+          kids
+            %-  ~(run by (kid:of-top here))
+            |=  =room:neo
+            [state.room state.icon.room]
+        ==
       ?>  =('hawk' i.t.site.line)
         ::
         ?:  =(%'POST' method.request.req)  ::  %poke
