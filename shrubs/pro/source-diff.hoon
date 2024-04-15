@@ -1,3 +1,2 @@
-/@  entry
-$%  [%post =entry]
+$%  [%post entry=@t]
 ==

@@ -1,4 +1,3 @@
-/@  entry
 $%  [%follow =ship]  :: makes a mirror
-    [%post =entry]   :: posts to source
+    [%post entry=@t]   :: posts to source
 ==
