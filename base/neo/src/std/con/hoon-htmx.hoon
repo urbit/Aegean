@@ -1,3 +1,4 @@
+/@  htmx
 :-  [%hoon %htmx]
 |=  hon=@t
 |=  =bowl:neo
@@ -57,9 +58,9 @@
     ;textarea.p2.border.br1.ma.scroll-x.pre.mono.wf
       =style  "max-width: 650px;"
       =autocomplete  "off"
-      =rows  "0"
+      =rows  "4"
       =name  "text"
-      =is  "multiline-input"
+      =oninput  "this.setAttribute('value', this.value); this.rows = this.value.split('\\n')"
       ;*
       %+  turn  src
       |=  lin=@t

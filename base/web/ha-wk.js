@@ -12,6 +12,8 @@ class extends HTMLElement {
       <style>
         :host {
           display: flex;
+          height: 100%;
+          overflow: hidden;
           flex-direction: column;
           position: relative;
         }
@@ -30,6 +32,11 @@ class extends HTMLElement {
           gap: 4px;
           flex-grow: 1;
           background-color: var(--b2);
+        }
+        @media (max-width: 900px) {
+          #actions {
+            display: none;
+          }
         }
       </style>
       <template id="button-template">
@@ -111,13 +118,14 @@ class extends HTMLElement {
           </div>
       </section>
       <div id="tree" class="hidden grow scroll-y scroll-x p2 b2">
-        <slot name="tree">Tree view</slot>
+        <slot name="tree" id="tree-slot">Tree view</slot>
       </div>
       <slot id="slot">Nothing here</slot>
     `;
   }
   connectedCallback() {
     //
+    let treed = false;
     this.gid("slot").addEventListener("slotchange", (e) => {
       let nodes = e.target.assignedNodes();
       let btns = this.gid("breadcrumbs");
@@ -150,13 +158,16 @@ class extends HTMLElement {
             btn.textContent = s + "/";
             this.appendChild(btn);
           })
+          let tree = document.createElement("div");
           let treeStub = document.createElement("div");
           treeStub.setAttribute("hx-get", `/neo/hawk${here}?tree`);
           treeStub.setAttribute("hx-target", `this`);
           treeStub.setAttribute("hx-trigger", `load`);
           treeStub.setAttribute("hx-swap", `outerHTML`);
-          treeStub.setAttribute("slot", "tree");
-          this.appendChild(treeStub);
+          tree.setAttribute("slot", "tree");
+          tree.appendChild(treeStub);
+          this.tree?.remove();
+          this.appendChild(tree);
 
           htmx.process(document.body);
         } else {
@@ -207,6 +218,9 @@ class extends HTMLElement {
   }
   get slotted() {
     return (this.gid("slot").assignedNodes() || [null])[0]
+  }
+  get tree() {
+    return (this.gid("tree-slot").assignedNodes() || [null])[0]
   }
   inspect() {
     const event = new CustomEvent('inspect-hawk', {

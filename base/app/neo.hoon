@@ -14,6 +14,7 @@
 /*  multiline-input   %js   /web/multiline-input/js
 /*  ha-wk   %js   /web/ha-wk/js
 /*  s-k-y   %js   /web/s-k-y/js
+/*  a-i-r   %js   /web/a-i-r/js
 /*  style-css   %css   /web/style/css
 |%
 ++  pave  pave:neo
@@ -659,7 +660,7 @@
       %+  turn  ~(tap by (kid:of-top here))
       |=  [=pith:neo *]
       -.pith
-    ;div.wf.hf.fc.g1.js.ac.scroll-x.scroll-y
+    ;div.wf.hf.fc.g1.js.ac
       =here  (en-tape:pith:neo here)
       =slot  "tree"
       ;*
@@ -786,6 +787,16 @@
         ;script(src "https://unpkg.com/htmx.org@1.9.11/dist/ext/response-targets.js");
         ;script: {html-enc-js}
         ;meta
+          =name  "viewport"
+          =content
+            """
+            width=device-width,
+            initial-scale=1.0,
+            maximum-scale=1.0"
+            """
+          ;
+        ==
+        ;meta
           =name  "htmx-config"
           =content  (trip '{"ignoreTitle":"true"}')
           ;
@@ -821,6 +832,7 @@
         ;script: {(trip multiline-input)}
         ;script: {(trip ha-wk)}
         ;script: {(trip s-k-y)}
+        ;script: {(trip a-i-r)}
         ;+  favicon
       ==
       ;body

@@ -15,7 +15,8 @@
     ;date-now;
     ;textarea.p2.border.br1
       =placeholder  ". . . text"
-      =is  "multiline-input"
+      =oninput  "this.setAttribute('value', this.value)"
+      =rows  "4"
       =required  ""
       =autocomplete  "off"
       ;

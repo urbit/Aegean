@@ -10,9 +10,10 @@
   ;textarea.wf.p2.border.br1.ma
     =style  "max-width: 650px;"
     =autocomplete  "off"
-    =rows  "0"
+    =rows  "4"
     =name  "text"
-    =is  "multiline-input"
+    =oninput  "this.setAttribute('value', this.value);"
+    ::=is  "multiline-input"
     ; {(trip (@t txt))}
   ==
 ==

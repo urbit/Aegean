@@ -121,6 +121,10 @@ button, input, textarea, iframe {
   display: flex;
   flex-direction: column;
 }
+.fcr {
+  display: flex;
+  flex-direction: column-reverse;
+}
 .fr {
   display: flex;
   flex-direction: row;

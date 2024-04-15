@@ -2,7 +2,7 @@ customElements.define('s-k-y',
 class extends HTMLElement {
   static get observedAttributes() {
     //
-    return ["open", "hawks"];
+    return ["hawks"];
   }
   constructor() {
     //
@@ -11,26 +11,15 @@ class extends HTMLElement {
     this.shadowRoot.adoptedStyleSheets = [sharedStyles];
     this.shadowRoot.innerHTML = `
       <style>
-        :host {
-          position: fixed;
-          display: flex;
-          flex-flow: row nowrap;
-          width: 100%;
-          height: 100%;
-        }
-        section {
-        }
+       :host {
+         width: 100%;
+         height: 100%;
+       }
       </style>
-      <nav id="nav" class="fc p2 f2 g2">
-        <button
-          class="p2 bold b2 br2 hover mono wfc"
-          onclick="this.getRootNode().host.toggleAttribute('open')"
-          >
-          ~
-        </button>
-        <div id="aside" class="fc g2 hidden wf" style="width: 200px; user-select: none;">
+      <a-i-r class="wf hf">
+        <nav slot="nav" class="wf hf scroll-y fc g2 p2">
           <button
-            class="p2 tc hover br2 b1"
+            class="p2 tc hover br1 b1"
             onclick="this.getRootNode().host.newTab()"
             >
             +
@@ -64,28 +53,22 @@ class extends HTMLElement {
               </div>
             </template>
           </div>
-        </div>
-      </nav>
-      <div id="cs0" class="fr wf hf basis-full">
-        <slot id="s0" name="s0"></slot>
-        <div id="cs1" class="fc basis-none">
-          <slot id="s1" name="s1"></slot>
-          <div id="cs2" class="fr basis-none">
-            <slot id="s2" name="s2"></slot>
-            <div id="cs3" class="fc basis-none">
-              <slot id="s3" name="s3"></slot>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="hidden">
-        <slot name="s-"></slot>
-        <slot id="default"></slot>
-      </div>
+        </nav>
+        <slot slot="s1" name="s1"></slot>
+        <slot slot="s2" name="s2"></slot>
+        <slot slot="s3" name="s3"></slot>
+        <slot slot="s4" name="s4"></slot>
+        <slot style="display: none;"></slot>
+      </a-i-r>
     `;
   }
   connectedCallback() {
     //
+    if (this.isMobile) {
+      this.className = "fc grow wf af"
+    } else {
+      this.className = "fr wf hf"
+    }
     this.gid("s0")?.addEventListener("slotchange", () => {this.reactSlot("s0")});
     this.gid("s1")?.addEventListener("slotchange", () => {this.reactSlot("s1")});
     this.gid("s2")?.addEventListener("slotchange", () => {this.reactSlot("s2")});
@@ -124,15 +107,35 @@ class extends HTMLElement {
   }
   attributeChangedCallback(name, oldValue, newValue) {
     //
-    if (name === "open") {
-      this.gid("aside").classList.toggle("hidden");
-    } else if (name === "hawks") {
+    /* if (name === "open") { */
+    /* this.gid("aside").classList.toggle("hidden"); */
+    /* if (this.isMobile) { */
+    /* if (newValue === null) { */
+    /* this.gid("cs0").classList.remove("hidden"); */
+    /* } else { */
+    /* this.gid("cs0").classList.add("hidden"); */
+    /* } */
+    /* } else { */
+    /* this.gid("cs0").classList.remove("hidden"); */
+    /* } */
+    /* } else if (name === "hawks") { */
+    if (name === "hawks") {
+      this.qs("a-i-r").setAttribute("hawks", newValue);
       this.trueSlots();
       this.updateTabs();
     }
   }
+  get isMobile() {
+    return (window.innerWidth < 900)
+  }
   get hawks() {
     return parseInt(this.getAttribute("hawks") || "0");
+  }
+  get slottedHawks() {
+    return [...this.childNodes].filter(c => c.nodeName === 'HA-WK');
+  }
+  qs(sel) {
+    return this.shadowRoot.querySelector(sel);
   }
   gid(id) {
     //
@@ -144,11 +147,11 @@ class extends HTMLElement {
   }
   trueSlots() {
     //
-    let kids = [...this.childNodes];
+    let kids = [...this.childNodes].filter(c => c.nodeName === 'HA-WK');
     let hawks = parseInt(this.getAttribute("hawks") || "1");
     kids.forEach((k, i) => {
       if (i < hawks) {
-        k.setAttribute("slot", `s${i}`)
+        k.setAttribute("slot", `s${i+1}`)
       } else  {
         k.removeAttribute("slot");
       }
@@ -160,13 +163,12 @@ class extends HTMLElement {
     let s = this.slotted(id);
     let c = this.gid("c"+id);
     let slot = parseInt(id.slice(1));
-    if (s && slot < this.hawks) {
+    if (s && slot <= this.hawks) {
       // display hawk
-      s.style.maxWidth = '100%';
-      s.style.maxHeight = '100%';
       s.classList.add("b0");
+      s.classList.add("fc");
+      s.classList.add("js");
       s.classList.add("scroll-y");
-      s.classList.add("scroll-x");
       //
       s.classList.add("grow");
       c.classList.add("grow");
@@ -186,8 +188,6 @@ class extends HTMLElement {
         s.classList.add("basis-none");
         s.classList.remove("basis-half");
         s.classList.add('hidden');
-        s.classList.add("scroll-y");
-        s.classList.add("scroll-x");
       }
       c.classList.remove("grow");
       c.classList.add("basis-none");
@@ -202,7 +202,7 @@ class extends HTMLElement {
   }
   updateTabs() {
     //
-    let frames = [...this.childNodes];
+    let frames = [...this.childNodes].filter(c => c.nodeName === 'HA-WK');
     let tabs = this.gid("tabs");
     tabs.querySelectorAll('div').forEach(x => x.remove());
     frames.forEach((f, i) => {
@@ -259,12 +259,12 @@ class extends HTMLElement {
     this.syncTabs();
   }
   grow() {
-    this.setAttribute("hawks", Math.min(4, this.children.length, this.hawks + 1));
+    this.setAttribute("hawks", Math.min(4, this.slottedHawks.length, this.hawks + 1));
     this.trueSlots();
     this.syncTabs();
   }
   async syncTabs() {
-    let frames = [...this.childNodes];
+    let frames = [...this.childNodes].filter(c => c.nodeName === 'HA-WK');
     let forms = frames.map(f => {
       return `
       <p here="${f.getAttribute('here')}"></p>
