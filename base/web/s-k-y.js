@@ -93,6 +93,7 @@ class extends HTMLElement {
     this.gid("default")?.addEventListener("slotchange", (e) => this.reactDefault(e));
     this.addEventListener("here-change", (e) => {
       this.updateTabs();
+      this.syncTabs();
     })
     this.addEventListener("cull", (e) => {
       this.cull();
@@ -101,6 +102,7 @@ class extends HTMLElement {
     this.addEventListener("true", (e) => {
       this.trueSlots();
       this.updateTabs();
+      this.syncTabs();
     });
     this.addEventListener("grow", (e) => {
       this.grow();

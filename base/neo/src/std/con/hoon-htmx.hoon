@@ -22,7 +22,7 @@
 ::
 ++  apex
   ^-  manx
-  ;div.scroll-x
+  ;div.scroll-x.p3
     ;+  imports
     ;+  contents
   ==
@@ -44,11 +44,26 @@
       ==
     ==
   ==
-++  contents   
-  ;code.pre.scroll-x.scroll-y.p2.block.mono
-    ;* 
-    %+  turn  src
-    |=  lin=@t
-    ;div: {(trip lin)}
+++  contents
+  ;form.fc.g2.wf.relative.p2
+    =hx-put  "{(en-tape:pith:neo (welp /neo/hawk here.bowl))}?stud=hoon"
+    ;div.p2.wf.z1
+      =style  "position: sticky; top: 0; right: 0;"
+      ;button.p2.br1.b1.hover.loader.wf
+        ;span.loaded: save
+        ;span.loading: ...
+      ==
+    ==
+    ;textarea.p2.border.br1.ma.scroll-x.pre.mono.wf
+      =style  "max-width: 650px;"
+      =autocomplete  "off"
+      =rows  "0"
+      =name  "text"
+      =is  "multiline-input"
+      ;*
+      %+  turn  src
+      |=  lin=@t
+      ;/  "{(trip lin)}\0a"
+    ==
   ==
 --

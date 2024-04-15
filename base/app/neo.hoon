@@ -971,7 +971,27 @@
           ::
         ?:  =(%'PUT' method.request.req)    ::  %make
           ::
-          !!
+          =/  stud  (@tas (~(got by pam.purl) 'stud'))
+          =/  conv  !<($-([@ manx] vase) (all-grab %node))
+          ?@  vert=(mole |.((conv [stud body])))
+            (send (manx-response:gen:serv ;/("failed to convert")))
+          =/  =pail:neo  [stud u.vert]
+          =.  run
+            %-  poke-move
+            :-  #/[p/our.bowl]/$/eyre/req/[eyre-id]
+            [(pave here) %make p.pail `q.pail ~]
+          %-  send
+          ::
+          %-  manx-response:gen:serv
+          =+  !<(grow=$-(pail:neo $-(=bowl:neo manx)) (all-grow %htmx))
+          ?^  man=(mole |.((grow pail)))
+            %-  u.man
+            =+  b=*bowl.neo  :: manually constructing a bowl. this is ugly
+            %=  b
+              here  (pave pax.purl)
+            ==
+          ;div: some sorta error occured
+          ::
           ::
         ?:  =(%'DELETE' method.request.req) ::  %tomb
           ::
