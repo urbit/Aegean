@@ -19,7 +19,7 @@
     =/  act  
       ;;  feed-action
       !<(feed-action vax)
-    :_  vax
+    :_  state-vase
     ?-    -.act
         %follow
       =/  =conf:neo

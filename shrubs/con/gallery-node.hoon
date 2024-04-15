@@ -1,4 +1,4 @@
-/@  gallery
+/@  feed
 :-  [%gallery %node]
 |=  [gal=gallery =bowl:neo]
 ~&  >>>  gal

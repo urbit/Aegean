@@ -19,7 +19,7 @@
   ++  poke
     |=  [=stud:neo vax=vase]
     ^-  (quip card:neo vase)
-    [~ vax]
+    [~ state-vase]
   ++  init
     |=  vas=(unit vase)
     [~ *vase]

@@ -20,7 +20,7 @@
       ;;  source-diff
       !<(source-diff vax)
     ?>  =(%post -.act)
-    :_  vax
+    :_  state-vase
     :~  :-  (snoc here.bowl da/now.bowl) 
         [%make %entry `!>(entry.act) ~]
     ==

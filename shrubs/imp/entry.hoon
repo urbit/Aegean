@@ -9,7 +9,7 @@
   |_  [=bowl:neo =ever:neo state-vase=vase *]
   ++  poke
     |=  [=stud:neo vax=vase]
-    [~ vax]
+    [~ state-vase]
   ++  init
     |=  vas=(unit vase)
     =/  v  ;;(@t !<(@t (need vas)))
