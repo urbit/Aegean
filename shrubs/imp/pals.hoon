@@ -12,7 +12,7 @@
   =/  =pith  #/pals/[p/ship]
   ?~  kid=(~(get by kids.bowl) pith)
     ~
-  =+  !<(child=pal-type u.kid)
+  =+  !<(child=pal-type q.u.kid)
   `type.child
 ++  her-hey
   |=  kin=(unit kind)
@@ -41,6 +41,7 @@
   [were %poke %pals-diff !>(diff)]
 
 --
+^-  firm:neo
 |%
 ++  state  %sig
 ++  poke  (sy %pals-diff ~)

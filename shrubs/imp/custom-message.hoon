@@ -1,6 +1,6 @@
-/@  message
+/@  custom-message
 |%
-++  state  %message
+++  state  %custom-message
 ++  poke   ~
 ++  kids   *kids:neo
 ++  deps   *deps:neo

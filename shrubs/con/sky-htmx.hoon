@@ -66,20 +66,26 @@
     ?:  =(theme %dark)  theme-dark
     theme-system
     ::
-  ;div.wf.b1(style "min-height: 100vh;")
-    ;style: {colors}
-    ;s-k-y.wf.hf(open "", hawks "0")
-      ;*  %:  turn  ~(tap by kids:bowl)
-        |=  [=pith =vase]
-        ;ha-wk
-          =hx-get  "/neo/hawk{(en-tape:pith:neo pith)}"
-          =hx-trigger  "load"
-          =hx-swap  "innerHTML"
-          ;div.wf.hf.fc.jc.ac.f2
-            ; loading . . .
-          ==
+  ;s-k-y.wf.hf(open "", hawks "{<slots.sky>}")
+    ;*
+    =<  p
+    %^  spin  hawks.sky
+          1
+        |=  [=pith a=@]
+      :_  +(a)
+    ;ha-wk
+      =slot  "s{<a>}"
+      =here  (en-tape:pith:neo pith)
+      ;div
+        =hx-get  "/neo/hawk{(en-tape:pith:neo pith)}"
+        =hx-trigger  "load"
+        =hx-target  "this"
+        =hx-swap  "outerHTML"
+        ;div.wf.hf.fc.jc.ac.f2
+          ; loading . . .
         ==
       ==
     ==
+    ;style: {colors}
   ==
 --

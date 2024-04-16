@@ -1,18 +1,25 @@
-/@  message :: message:/~zod/desk/1 <- [p=stud q=*]
+/@  message
 /@  chat-diff
 /@  chat
 /@  sig
-=> 
+/-  _/thing
+=>
 |%
 ++  state  chat
 ++  poke  chat-diff
 ++  card  card:neo
-++  add-msg
+::
+++  add-message
   |=  [=bowl:neo msg=message]
   ^-  card:neo
-  :-  (welp were.bowl ~[da/now.bowl])
+  (add-msg bowl %message !>(msg))
+::
+++  add-msg
+  |=  [=bowl:neo =stud:neo vax=vase]
+  ^-  card:neo
+  :-  (welp were.bowl ~[%messages da/now.bowl])
   ^-  note:neo
-  [%make %message `!>(msg) ~]
+  [%make stud `vax ~]
 
 --
 ^-  firm:neo
@@ -26,7 +33,7 @@
   ==
 ++  deps
   %-  ~(gas by *deps:neo)
-  :~  open/[required=| %x %bool %sig]
+  :~  open/[required=| [%bool %sig] ~]
   ==
 ++  form
   ^-  form:neo
@@ -47,9 +54,10 @@
         %add    `sta(who (~(put in who.sta) ship.poke))
         %del    `sta(who (~(del in who.sta) ship.poke))
         %dbug   `sta
-        %msg    :_(sta (add-msg bowl msg.poke)^~)
+        %msg    :_(sta (add-message bowl message.poke)^~)
+        %custom  :_(sta (add-msg bowl [stud vase]:poke)^~)
       ==
-    ~&  dbug/"testing changes foo bar baz"
+    %-  (slog leaf/"debug" (turn ~(val by kids.bowl) |=(p=pail:neo (sell q.p))))
     [cards !>(sta)]
   ++  init
     |=  old=(unit vase)

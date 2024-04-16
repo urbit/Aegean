@@ -6,19 +6,23 @@
 ++  add-photo 
   |=  [=bowl:neo pic=photo]
   ^-  card:neo
-  :-  (welp were.bowl ~[da/now.bowl])
+  ~&  >>  ['here.bowl' here.bowl]
+  :-  (welp here.bowl ~[da/now.bowl])
   ^-  note:neo
   [%make %photo `!>(pic) ~]
--- 
+--
 ^-  firm:neo
 |%
 ++  state  %gallery
 ++  poke   (sy %gallery-diff ~)
-++  kids
+++  kids  
   %-  ~(gas by *kids:neo)
-  :~  [~[|/%da] %photo %sig]
+  :~  [~[&/%photo |/%da] %photo %sig]
   ==
-++  deps  *deps:neo
+++  deps   ::subscribtions dependencies 
+::     :~  acl/[req=& %x %circle %sig]
+::   ==
+  *deps:neo
 ++  form
   ^-  form:neo
   |_  [=bowl:neo =ever:neo state-vase=vase *]
@@ -30,22 +34,22 @@
   ++  poke
     |=  [=stud:neo vax=vase]
     ^-  (quip card:neo vase)
-    ?>  =(our ship.src):bowl
     ?>  =(%gallery-diff stud)
     =/  poke  !<(gallery-diff vax)
-    ?-    -.poke
-        %name
+    ?>  =(our ship.src):bowl
+    ?-  -.poke
+        %name  
       =/  sta   !<(gallery state-vase)
       [~ !>(sta(name name.poke))]
-    ::
+      ::
         %add-photo
+      ~&  photo.poke
       :_  state-vase
       ~[(add-photo bowl photo.poke)]
-    ::
+      ::
         %del-photo
-      ::  This will crash, no %tomb yet
-      :::_  state-vase
-      ::~[[(snoc here.bowl da/id.poke) %tomb ~]]
+      ~&  date.poke
+      ~&  >>  ['here.bowl' here.bowl]
       `state-vase
     ==
   --

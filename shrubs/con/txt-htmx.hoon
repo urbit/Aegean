@@ -7,13 +7,13 @@
   =hx-post  "/neo/hawk{(en-tape:pith:neo here.bowl)}?stud=txt"
   =hx-trigger  "input changed delay:0.4s from:find textarea"
   =hx-swap  "none"
-  ;date-now;
   ;textarea.wf.p2.border.br1.ma
     =style  "max-width: 650px;"
     =autocomplete  "off"
-    =rows  "0"
+    =rows  "4"
     =name  "text"
-    =is  "multiline-input"
+    =oninput  "this.setAttribute('value', this.value);"
+    ::=is  "multiline-input"
     ; {(trip (@t txt))}
   ==
 ==

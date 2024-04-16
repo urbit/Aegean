@@ -4,11 +4,18 @@
 |=  =bowl:neo
 ?-  -.gallery-diff
     %add-photo
-    ::=/  pic-src  (trip data.photo.gallery-diff)
-    ;div(class "flex-[0_0_33.3333%]")
-      ;img 
-        =src  (trip data.photo.gallery-diff)
-      ;
+    ::can't make clickable because of @da assign at time of creating
+    ::need to change that da assign at the time of event 
+    =/  pic-src  (trip data.photo.gallery-diff)
+    ;div
+      =class  "p2 w-1/3"
+      ;img.wf.ha
+        :: =hx-get  "{(en-tape:pith:neo (weld /neo/hawk here.bowl))}/{pic-at}"
+        ::=hx-trigger  "click"
+        ::=hx-target   "closest ha-wk"
+        ::=hx-swap     "innerHTML"
+        =src  pic-src
+        ;
       ==
     ==
     ::
